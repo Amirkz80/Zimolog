@@ -13,7 +13,7 @@
 
    {% for post in posts %}
      <li>
-      <p>{{ post.date_added|date:'M d, Y H:i' }}</p>
+      <p> {{post.owner}} POSTED AT : {{ post.date_added|date:'M d, Y H:i' }}</p>
       <p>- {{ post.title }}</p>
       <p>{{ post.text|linebreaks }}</p>
       <p>
