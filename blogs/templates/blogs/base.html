@@ -1,0 +1,22 @@
+<p>
+  
+  <a href="{% url 'blogs:index' %}">Thr Blog!</a>
+  - <a href="{% url 'blogs:add_post' %}">Add a new post</a>
+
+  {% if user.is_authenticated %}
+    - <a href="{% url 'users:logout' %}">Log out</a>
+    - Today's Date/Hour : {% now "M d, Y H:i" %}
+    <br></br>
+
+  {% else %}
+    - <a href="{% url 'users:register' %}">Register</a>
+    - <a href="{% url 'users:login' %}">Login</a>
+    - Today's Date/Hour: {% now "M d, Y H:i" %}
+    <br></br>
+
+  {% endif %}
+
+</p>
+
+
+{% block content %}{% endblock content %}    
