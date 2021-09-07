@@ -4,19 +4,14 @@ from django.http import Http404
 from .models import BlogPost
 from .forms import BlogPostForm
 
-
-
-def check_post_owner(post_owner, currnet_user):
-    """Checks if the current logged in user is post's owner"""
-    if post_owner != currnet_user:
-        raise Http404
-
+    
 def index(request):
     """Shows the posts in the main page"""
     posts = BlogPost.objects.order_by('-date_added')
     context = {'posts' : posts}
 
     return render(request, 'blogs/index.html', context)
+
 
 @login_required
 def add_post(request):
@@ -36,11 +31,14 @@ def add_post(request):
     context = {'form': form}
     return render(request, 'blogs/add_post.html', context)     
 
+
 @login_required
 def edit_post(request, post_id):
     """Edits a post"""
     post = BlogPost.objects.get(id=post_id)
-    check_post_owner(post.owner, request.user)
+    """Checks if the current logged in user is post's owner"""
+    if request.user != post.owner:
+        return render(request, 'blogs/prompt.html')
 
     if request.method != 'POST':
         # initial request, pre-fills the form with currnet post
