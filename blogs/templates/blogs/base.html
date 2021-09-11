@@ -1,22 +1,117 @@
-<p>
+{% load bootstrap5 %}
+
+<!doctype html>
+<html lang="eng">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,
+  initial-scale=1, shrink-to-fit=no">
+  <title>ZimoLog</title>
+
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+
+  {% bootstrap_messages %}
+
+</head>
+
+<body>
   
-  <a href="{% url 'blogs:index' %}">Thr Blog!</a>
-  - <a href="{% url 'blogs:add_post' %}">Add a new post</a>
+  <style>
+    #big_z{
+    color: yellow;
+    font-size: large;
+    }
+    #medium_z{
+    color: yellow;
+    font-size: medium;
+    }
+    #small_z{
+    color: yellow;
+    font-size: small;
+    }
+  </style>
+  
+  <nav class="navbar navbar-dark bg-secondary fixed-top mb-1 border">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'blogs:index' %}">ZimoLog</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="offcanvas offcanvas-end bg-secondary" tabindex="-1"
+      id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasNavbarLabel">
+          <span class="text-white" id="big_z">Be a part of Zimo</span><span id=
+          "big_z">z</span><span id="medium_z">z</span><span
+          id="small_z">z...</span></h5>
+          <button type="button" class="btn-close text-reset"
+          data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" 
+              href="{% url 'blogs:index' %}">Home</a>
+            </li>
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'blogs:add_post'%}">Add post</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" 
+              id="offcanvasNavbarDropdown" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              {{ user.username }}
+              </a>
+              <ul class="dropdown-menu"
+              aria-labelledby="offcanvasNavbarDropdown">
+                <li>
+                  <a class="dropdown-item" href="#">Profile</a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{% url 'users:logged_out'%}">Log out</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <br></br>
+          <form class="d-flex">
+            <input class="form-control me-2" type="search"
+            placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success bg-warning" 
+            type="submit"><span class="text-black">Search</span></button>
+          </form>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link active" aria-current=page
+              href="{% url 'users:login' %}">Log in</a>
+            </li>  
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page"
+              href="{% url 'users:register' %}">Sign up</a>
+            </li>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </nav>
 
-  {% if user.is_authenticated %}
-    - <a href="{% url 'users:logout' %}">Log out</a>
-    - Today's Date/Hour : {% now "M d, Y H:i" %}
-    <br></br>
+  
+  <main role="main" class="container">
+  <br></br>
+  <br></br>
+    <div class="pb-3 mb-5 border-bottom">
+      {% block page_header%}{% endblock page_header %}
+    </div>
+    <div>
+      {% block content %}{% endblock content %}
+    </div>
+  </main>
 
-  {% else %}
-    - <a href="{% url 'users:register' %}">Register</a>
-    - <a href="{% url 'users:login' %}">Login</a>
-    - Today's Date/Hour: {% now "M d, Y H:i" %}
-    <br></br>
-
-  {% endif %}
-
-</p>
-
-
-{% block content %}{% endblock content %}    
+</body>  
