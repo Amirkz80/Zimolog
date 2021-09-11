@@ -1,27 +1,44 @@
 {% extends "blogs/base.html" %}
 
+
+{% block page_header %}
+<style>
+  #welcome, #hello{
+    font-family: "Times New Roman";
+  }  
+</style>
+
+    {% if user.is_authenticated %}
+      <h1 class="text-success" id="hello">Hello, {{ user.username }}.</h1>
+    {% else %}
+      
+      <h1 class="text-success" id="welcome">Welcome.</h1> 
+    {% endif %}
+{% endblock page_header %}      
+
+
 {% block content %}
 
-  {% if user.is_authenticated %}
-    <p>Hello , {{ user.username }} !</p>
-  {% else %}
-    <p>Welcome to the Blog!</p>
-  {% endif %}
-      
-  <ul>
-   <p>Posts :</p>
-
-   {% for post in posts %}
-     <li>
-      <p> {{post.owner}} POSTED AT : {{ post.date_added|date:'M d, Y H:i' }}</p>
-      <p>- {{ post.title }}</p>
-      <p>{{ post.text|linebreaks }}</p>
-      <p>
-      <a href="{% url 'blogs:edit_post' post.id %}">Edit post</a>
-      </p>
-   {% empty %}
-     <li> There hasn't been any post yet!<li>   
-   {% endfor %}
-  </ul>
+    {% for post in posts %}
+      <div class="card mb-4 border-dark">
+        <h6 class="card-header bg-secondary">
+        <small class="text-info">
+          {{post.owner}} posted at : {{ post.date_added|date:'M d, Y H:i' }}
+        </small>
+        </h6>
+        <div class="card-body bg-secondary">
+          <h4 class="text-light">- {{ post.title }}</h4>
+          <br></br>
+          <h6 class="text-light mb-5">{{ post.text|linebreaks }}</h6>
+          <p>
+          <a class="btn btn-info" href="{% url 'blogs:edit_post' post.id %}">
+            Edit post
+          </a>
+          </p>
+        </div>
+      </div>  
+    {% empty %}
+    There hasn't been any post yet!   
+    {% endfor %}
 
 {% endblock content %}
