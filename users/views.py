@@ -20,3 +20,8 @@ def register(request):
     # Shows a blank or invalid form
     context = {'form': form}
     return render(request, 'registration/register.html', context)
+
+def logged_out(request):
+    """logging out"""
+    logout(request)
+    return redirect(request, 'registration/logged_out') 
