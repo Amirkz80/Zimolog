@@ -1,13 +1,26 @@
 {% extends "blogs/base.html" %}
 
+{% load bootstrap5 %}
+
+
+{% block page_header %}
+  <style>
+    h1,form{
+    color: green;
+    font-family: Gerogia;
+  }
+  </style>
+
+  <h1>Edit Post<h1>
+{% endblock page_header%}
+
 {% block content %}
-
-  <p>Edit posts :</p>
-
-  <form action="{% url 'blogs:edit_post' post.id %}" method='post'>
+  <form class="form "action="{% url 'blogs:edit_post' post.id %}" method='post'>
     {% csrf_token %}
-    {{ form.as_p}}
-    <button name="submit">Save changes</button>
+    {% bootstrap_form form %}
+    {% buttons %}
+    <button class="btn btn-info "name="submit">Save changes</button>
+    {% endbuttons %}
+  
   </form>
-
 {% endblock content %}
