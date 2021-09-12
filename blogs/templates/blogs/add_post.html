@@ -1,14 +1,27 @@
 {% extends "blogs/base.html" %}
 
+{% load bootstrap5 %}
+
+
+{% block page_header %}
+  <style>
+    h1,form{
+    color: green;
+    font-family: Gerogia;
+  }
+  </style>
+  
+  <h1 class="text-success">Add a new post.<h1>
+{% endblock page_header %}
+
+
 {% block content %}
+  <form class="form" action="{% url 'blogs:add_post' %}" method='post'>
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons %}
+      <button class="btn btn-info" name="submit">Add post</button>
+    {% endbuttons %}
 
-<p>Add a new post :</p>
-
-<form action="{% url 'blogs:add_post' %}" method='post'>
-
-  {% csrf_token %}
-  {{ form.as_p}}
-  <button name="submit">Add post</button>
-</form>
-
+  </form>
 {% endblock content %}
