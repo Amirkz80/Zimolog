@@ -5,5 +5,5 @@ class BlogPostForm(forms.ModelForm):
     class Meta:
         model = BlogPost
         fields = ['title', 'text']
-        lables = {'title': '', 'text': '' }
+        labels = {'title': 'Post Title', 'text': 'Text' }
         widgets = {'text': forms.Textarea(attrs={'cols': 80})}
