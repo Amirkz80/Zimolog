@@ -3,24 +3,34 @@
 
 {% block page_header %}
 <style>
-  #welcome, #hello{
+  #welcome, #hello, #nopost, #editbutton, #latest_posts{
     font-family: "Times New Roman";
-  }  
+  }
+  #details{
+    font-family: Georgia;
+  }
+  #btntext{
+    color: mintcream;
+  }
 </style>
 
     {% if user.is_authenticated %}
-      <h1 class="text-success" id="hello">Hello, {{ user.username }}.</h1>
+      <h1 class="text-info" id="hello">Hello, {{ user.username }}.</h1>
     {% else %}
       
-      <h1 class="text-success" id="welcome">Welcome.</h1> 
+      <h1 class="text-info" id="welcome">Welcome.</h1> 
     {% endif %}
+
 {% endblock page_header %}      
 
 
 {% block content %}
+  <div class="text-success" id="latest_posts">
+    <h2 class="mb-5">Latest Posts :</h2>
+  </div>
 
     {% for post in posts %}
-      <div class="card mb-4 border-dark">
+      <div class="card mb-4 border-dark border-bottom">
         <h6 class="card-header bg-secondary">
         <small class="text-info">
           {{post.owner}} posted at : {{ post.date_added|date:'M d, Y H:i' }}
@@ -31,14 +41,16 @@
           <br></br>
           <h6 class="text-light mb-5">{{ post.text|linebreaks }}</h6>
           <p>
-          <a class="btn btn-info" href="{% url 'blogs:edit_post' post.id %}">
-            Edit post
+          <a class="btn btn-info" id="editbutton" href="{% url 'blogs:edit_post' post.id %}">
+            <span id="btntext">Edit post</span>
           </a>
           </p>
         </div>
-      </div>  
+      </div>
+      <div class="mb-2 border-info border-bottom"></div>
+      <div class="mb-4"></div> 
     {% empty %}
-    There hasn't been any post yet!   
+    <h1 class="text-success" id="nopost">There hasn't been any post yet!</h1>   
     {% endfor %}
 
 {% endblock content %}
