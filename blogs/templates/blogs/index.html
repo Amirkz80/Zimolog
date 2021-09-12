@@ -3,7 +3,7 @@
 
 {% block page_header %}
 <style>
-  #welcome, #hello, #nopost, #editbutton, #latest_posts{
+  #welcome, #nopost, #editbutton, #hello, #latest_posts{
     font-family: "Times New Roman";
   }
   #details{
@@ -12,21 +12,22 @@
   #btntext{
     color: mintcream;
   }
+
 </style>
 
     {% if user.is_authenticated %}
-      <h1 class="text-info" id="hello">Hello, {{ user.username }}.</h1>
+      <h1 class="text-success"id="hello">Hello, {{ user.username }}.</h1>
     {% else %}
       
-      <h1 class="text-info" id="welcome">Welcome.</h1> 
+      <h1 class="text-success" id="welcome">Welcome.</h1> 
     {% endif %}
 
 {% endblock page_header %}      
 
 
 {% block content %}
-  <div class="text-success" id="latest_posts">
-    <h2 class="mb-5">Latest Posts :</h2>
+  <div id="latest_posts">
+    <h2 class="mb-5 text-info">Latest Posts :</h2>
   </div>
 
     {% for post in posts %}
