@@ -1,14 +1,25 @@
-<p>
-  
-  <a href="{% url 'blogs:index' %}">Thr Blog!</a>
-  - <a href="{% url 'blogs:add_post' %}">Add a new post</a>
-  - <a href="{% url 'users:register' %}">Register</a>
-  - <a href="{% url 'users:login' %}">Login</a>
-  - Today's Date/Hour: {% now "M d, Y H:i" %}
-  
-</p>
+{% extends "blogs/base.html "%}
+
+{% load bootstrap5 %}
 
 
-  <p>
-  You've been logged out successfully, TNX for visiting !.
-  </p>
+{% block page_header %}
+  <style>
+    h1,form{
+    color: green;
+    font-family: Gerogia;
+  }
+  </style>
+
+  <h1>Goodbye<h2>
+{% endblock page_header %}
+
+
+{% block content %}
+  <h3>you've logged out successfully :)<h3>
+    <div class="mb-5"></div>
+  <a class="btn btn-info" href="{% url 'blogs:index' %}">
+  Home
+  </a>
+
+{% endblock content %}

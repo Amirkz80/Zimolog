@@ -1,20 +1,29 @@
 {% extends "blogs/base.html" %}
 
+{% load bootstrap5 %}
+
+{% block page_header %}
+  <style>
+    h1,form{
+    color: green;
+    font-family: Gerogia;
+  }
+  </style>
+  
+  <h1>Log in</h1>
+{% endblock page_header %}
+
 {% block content %}
   
-  {% if form.errors %}
-    The username and the password doesn't match.
-  {% endif %}
-    
-  <form method="post" action="{% url 'users:login' %}">
+  <form class="form" method="post" action="{% url 'users:login' %}">
     {% csrf_token %}
-    {{ form.as_p }}
+    {% bootstrap_form form %}
+    {% buttons %}
+    <button class="btn btn-info" name="sumbmit" >Login</button>    
+    {% endbuttons %}
 
-    <button name="sumbmit" >Login</button>    
     <input type="hidden" name="next" 
     value="{% url 'blogs:index' %}" />
+  
   </form> 
-
-
-
 {% endblock content %}
