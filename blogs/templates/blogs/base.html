@@ -18,20 +18,26 @@
     color: yellow;
     font-size: large;
     }
+
     #medium_z{
     color: yellow;
     font-size: medium;
     }
+
     #small_z{
     color: yellow;
     font-size: small;
     }
+
     #nav{
     font-family: Georgia;
+    font-size: large;
     }
+
     body{
       background-color: #FFFFEC;
     }
+
   </style>
 </head>
 
@@ -60,15 +66,19 @@
         <div class="offcanvas-body">
           <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" 
-              href="{% url 'blogs:index' %}">Home</a>
+              <a class="nav-link active mb-2" aria-current="page" 
+              href="{% url 'blogs:index' %} ">Home</a>
             </li>
             {% if user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'blogs:add_post'%}">Add post</a>
+              <a class="nav-link active mb-2" aria-current="page" href="{% url 'blogs:add_post'%}">Add post</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link active mb-2" aria-current=page
+                href="#">About</a>
+            </li> 
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" 
+              <a class="nav-link dropdown-toggle active mb-2" href="#" 
               id="offcanvasNavbarDropdown" role="button"
               data-bs-toggle="dropdown" aria-expanded="false">
               {{ user.username }}
@@ -76,13 +86,13 @@
               <ul class="dropdown-menu"
               aria-labelledby="offcanvasNavbarDropdown">
                 <li>
-                  <a class="dropdown-item" href="#">Profile</a>
+                  <a class="dropdown-item mb-2" href="{% url 'blogs:dashboard'%}">Profile</a>
                 </li>
                 <li>
-                  <hr class="dropdown-divider">
+                  <hr class="dropdown-divider mb-2">
                 </li>
                 <li>
-                  <a class="dropdown-item" href="{% url 'users:logged_out'%}">Log out</a>
+                  <a class="dropdown-item mb-2" href="{% url 'users:logged_out'%}">Log out</a>
                 </li>
               </ul>
             </li>
@@ -90,18 +100,22 @@
           <br></br>
           <form class="d-flex" action="{% url 'blogs:search' %}" method="get">
             <input class="form-control me-2" type="search"
-            placeholder="Search here" aria-label="Search" name="search">
+            placeholder="Search posts, titles, users..." aria-label="Search" name="search">
             <button class="btn btn-outline-success bg-warning" 
             type="submit"><span class="text-black">Search</span></button>
           </form>
           {% else %}
             <li class="nav-item">
-              <a class="nav-link active" aria-current=page
+              <a class="nav-link active mb-2" aria-current=page
               href="{% url 'users:login' %}">Log in</a>
             </li>  
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page"
+              <a class="nav-link active mb-2" aria-current="page"
               href="{% url 'users:register' %}">Sign up</a>
+            </li>
+            <li class="nav-item mb-2">
+                <a class="nav-link active" aria-current=page
+                href="#">About</a>
             </li>
           {% endif %}
         </div>
