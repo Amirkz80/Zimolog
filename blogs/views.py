@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from .models import BlogPost
-from .forms import BlogPostForm
+from .forms import BlogPostForm 
 
-    
+
 def index(request):
     """Shows the posts in the main page"""
     posts = BlogPost.objects.order_by('-date_added')
@@ -52,3 +52,20 @@ def edit_post(request, post_id):
 
     context = {'form' : form, 'post' : post}
     return render(request, 'blogs/edit_post.html', context)
+
+
+@login_required
+def search(request):
+    """searches the user's keyword and shows results"""
+
+    #getting user's search keyword
+    key = request.GET.get('search')
+
+    results = []
+    posts = BlogPost.objects.order_by('-date_added')
+    for post in posts:
+        if (key.lower() in post.text.lower()) or (key.lower() in post.title.lower()):
+            results.append(post)
+
+    context = {'results' : results, 'key' : key}
+    return render(request, 'blogs/results.html', context)     
