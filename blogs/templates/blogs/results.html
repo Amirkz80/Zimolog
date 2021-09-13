@@ -1,0 +1,64 @@
+{% extends "blogs/base.html" %}
+
+
+{% block page_header %}
+  
+  <style>
+    #editbutton, #posts, #resultsfor, #noresults, #nopost{
+    font-family: "Times New Roman";
+    }
+
+    #btntext{
+      color: mintcream;
+    }
+  </style>
+
+  {% if results %}
+    <h1 class="text-success" id="resultsfor" >
+    Search Results for "{{ key }}" </h1>
+  {% else %}
+    <h1 class="text-success" id="noresults" >
+    No results</h1>
+  {% endif %}
+
+{% endblock page_header %}
+
+
+{% block content %}
+
+  {% if results %}
+    <div id="posts">
+      <h2 class="mb-5 text-info">posts :</h2>
+    </div>
+  {% endif %}
+
+  {% for result in results %}
+    <div class="card mb-4 border-dark border-bottom">
+      <h6 class="card-header bg-secondary">
+      <small class="text-info">
+        {{result.owner}} posted at
+        : {{ result.date_added|date:'M d, Y H:i' }}
+      </small>
+      </h6>
+      <div class="card-body bg-secondary">
+        <h4 class="text-light">- {{ result.title }}</h4>
+        <br></br>
+        <h6 class="text-light mb-5">{{ result.text|linebreaks }}</h6>
+        <p>
+        <a class="btn btn-info" id="editbutton"
+         href="{% url 'blogs:edit_post' result.id %}">
+          <span id="btntext">Edit post</span>
+        </a>
+        </p>
+      </div>
+    </div>
+    <div class="mb-2 border-info border-bottom"></div>
+    <div class="mb-4"></div> 
+  
+  {% empty %}
+  <h2 class="text-info" id="nopost">
+  There were no results for "{{ key }}", try a new search.</h2>   
+  {% endfor %}
+
+
+{% endblock content %}
