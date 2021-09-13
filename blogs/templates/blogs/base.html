@@ -88,9 +88,9 @@
             </li>
           </ul>
           <br></br>
-          <form class="d-flex">
+          <form class="d-flex" action="{% url 'blogs:search' %}" method="get">
             <input class="form-control me-2" type="search"
-            placeholder="Search" aria-label="Search">
+            placeholder="Search here" aria-label="Search" name="search">
             <button class="btn btn-outline-success bg-warning" 
             type="submit"><span class="text-black">Search</span></button>
           </form>
