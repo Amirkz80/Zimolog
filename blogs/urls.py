@@ -10,5 +10,7 @@ urlpatterns= [
     # page that edits posts
     path('edit_post/<int:post_id>/', views.edit_post, name='edit_post'),
     # a page to show the user this post does't belong to him/her
-    path('prompt/', views.edit_post, name='prompt')
+    path('prompt/', views.edit_post, name='prompt'),
+    # a page that shows serach results
+    path('search/', views.search, name='search'),
 ]
