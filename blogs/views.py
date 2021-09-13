@@ -68,4 +68,12 @@ def search(request):
             results.append(post)
 
     context = {'results' : results, 'key' : key}
-    return render(request, 'blogs/results.html', context)     
+    return render(request, 'blogs/results.html', context)
+
+
+@login_required
+def dashboard(request):
+    """Shows user's informations and posts"""
+    user_posts = BlogPost.objects.filter(owner=request.user).order_by("-date_added")
+    context = {'user_posts' : user_posts}
+    return render(request, 'blogs/dashboard.html', context)    
