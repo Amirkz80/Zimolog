@@ -1,0 +1,53 @@
+{% extends "blogs/base.html" %}
+
+
+{% block page_header %}
+  
+    <h1 class="text-success" id="" >
+    This is your dashboard</h1>
+
+{% endblock page_header %}
+
+
+{% block content %}
+
+  {% if user_posts %}
+    <div id="">
+      <h2 class="mb-5 text-info">{{ user.username }}s' posts :</h2>
+    </div>
+  {% endif %}
+
+  {% for post in user_posts %}
+    <div class="card mb-4 border-dark border-bottom">
+      <h6 class="card-header bg-secondary">
+      <small class="text-info">
+        {{post.owner}} posted at
+        : {{ post.date_added|date:'M d, Y H:i' }}
+      </small>
+      </h6>
+      <div class="card-body bg-secondary">
+        <h4 class="text-light">- {{ post.title }}</h4>
+        <br></br>
+        <h6 class="text-light mb-5">{{ post.text|linebreaks }}</h6>
+        <p>
+        <a class="btn btn-info" id=""
+         href="{% url 'blogs:edit_post' post.id %}">
+          <span id="">Edit post &raquo;</span>
+        </a>
+        <a class="btn btn-danger" id=""
+         href="#">
+          <span id="">Delete post &raquo;</span>
+        </a>
+        </p>
+      </div>
+    </div>
+    <div class="mb-2 border-info border-bottom"></div>
+    <div class="mb-4"></div> 
+  
+  {% empty %}
+  <h2 class="text-info" id="">
+  You haven't added any posts yet .</h2>   
+  {% endfor %}
+
+
+{% endblock content %}
