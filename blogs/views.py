@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from .models import BlogPost
@@ -76,4 +76,11 @@ def dashboard(request):
     """Shows user's informations and posts"""
     user_posts = BlogPost.objects.filter(owner=request.user).order_by("-date_added")
     context = {'user_posts' : user_posts}
-    return render(request, 'blogs/dashboard.html', context)    
+    return render(request, 'blogs/dashboard.html', context)
+
+
+@login_required
+def delete(request, post_id):
+    """deletes the post"""
+    BlogPost.objects.get(id=post_id).delete()
+    return redirect("blogs:dashboard")
