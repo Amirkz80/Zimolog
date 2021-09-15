@@ -14,5 +14,7 @@ urlpatterns= [
     # page that shows serach results
     path('search/', views.search, name='search'),
     # page that shows user's profile and posts
-    path('dashboard/', views.dashboard, name='dashboard')
+    path('dashboard/', views.dashboard, name='dashboard'),
+    # deletes the post
+    path('delete/<int:post_id>/', views.delete, name='delete'),
 ]
