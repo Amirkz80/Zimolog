@@ -8,6 +8,9 @@ from .forms import BlogPostForm
 def index(request):
     """Shows the posts in the main page"""
     posts = BlogPost.objects.order_by('-date_added')
+    for post in posts:
+        if len(post.text) > 140 :
+            post.text = f"{post.text[:140]}..."
     context = {'posts' : posts}
 
     return render(request, 'blogs/index.html', context)

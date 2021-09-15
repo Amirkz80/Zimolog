@@ -11,6 +11,7 @@
 
 {% block content %}
 
+
   {% if user_posts %}
     <div id="">
       <h2 class="mb-5 text-info">{{ user.username }}s' posts :</h2>
@@ -20,18 +21,14 @@
 
   {% for post in user_posts %}
     <div class="card mb-4 border-dark border-bottom">
-      <h6 class="card-header bg-secondary">
-      <small class="text-info">
-        {{post.owner}} posted at
-        : {{ post.date_added|date:'M d, Y H:i' }}
-      </small>
-      </h6>
+      
       <div class="card-body bg-secondary">
         <h4 class="text-light">- {{ post.title }}</h4>
         <br></br>
         <h6 class="text-light mb-5">{{ post.text|linebreaks }}</h6>
+        
         <p>
-        <a class="btn btn-info" id=""
+        <a class="btn btn-info mr-4" id=""
          href="{% url 'blogs:edit_post' post.id %}">
           <span id="">Edit post &raquo;</span>
         </a>
@@ -43,7 +40,7 @@
 
         <!-- Modal -->
         <div class="modal fade" id="post-id-{{ post.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
         <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Delete post</h5>
@@ -59,11 +56,17 @@
         </div>
         </div>
         </div>
-
-
         </p>
       
       </div>
+
+      <div class="card-footer border-light bg-secondary">
+          <div class="text-info mr-1">
+            You posted at : {{ post.date_added|date:'M d, Y H:i' }}
+          </div>
+        </div>
+      </div>
+    
     </div>
     <div class="mb-2 border-info border-bottom"></div>
     <div class="mb-4"></div> 

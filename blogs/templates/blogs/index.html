@@ -2,14 +2,14 @@
 
 
 {% block page_header %}
+
 <style>
   #welcome, #nopost, #editbutton, #hello, #latest_posts{
     font-family: "Times New Roman";
   }
   #btntext{
     color: mintcream;
-  }
-
+  } 
 </style>
 
     {% if user.is_authenticated %}
@@ -29,22 +29,19 @@
 
     {% for post in posts %}
       <div class="card mb-4 border-dark border-bottom">
-        <h6 class="card-header bg-secondary">
-        <small class="text-info">
-          {{post.owner}} posted at : {{ post.date_added|date:'M d, Y H:i' }}
-        </small>
-        </h6>
         <div class="card-body bg-secondary">
           <h4 class="text-light">- {{ post.title }}</h4>
           <br></br>
-          <h6 class="text-light mb-5">{{ post.text|linebreaks }}</h6>
-          <p>
-          <a class="btn btn-info" id="editbutton" href="{% url 'blogs:edit_post' post.id %}">
-            <span id="btntext">Edit post</span>
-          </a>
-          </p>
+          <h6 class="text-light mb-4">{{ post.text|linebreaks }}</h6>
+        </div>
+
+        <div class="card-footer border-light bg-secondary">
+          <div class="text-info pr-4">
+            {{post.owner}} posted at : {{ post.date_added|date:'M d, Y H:i' }}
+          </div>
         </div>
       </div>
+
       <div class="mb-2 border-info border-bottom"></div>
       <div class="mb-4"></div> 
     {% empty %}
