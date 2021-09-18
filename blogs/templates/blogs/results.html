@@ -34,12 +34,7 @@
 
   {% for result in results %}
     <div class="card mb-4 border-dark border-bottom">
-      <h6 class="card-header bg-secondary">
-      <small class="text-info">
-        {{result.owner}} posted at
-        : {{ result.date_added|date:'M d, Y H:i' }}
-      </small>
-      </h6>
+      
       <div class="card-body bg-secondary">
         <h4 class="text-light">- {{ result.title }}</h4>
         <br></br>
@@ -51,6 +46,14 @@
         </a>
         </p>
       </div>
+    
+    <div class="card-footer border-light bg-secondary">
+      <div class="text-white text-end">
+          {{result.owner}} posted at : {{ result.date_added|date:'M d, Y H:i' }}
+          </div>
+      </div>
+    </div>  
+
     </div>
     <div class="mb-2 border-info border-bottom"></div>
     <div class="mb-4"></div> 
