@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
-from .models import BlogPost
-from .forms import BlogPostForm 
+from .models import BlogPost, Comments
+from .forms import BlogPostForm
 
 
 def index(request):
@@ -87,3 +87,11 @@ def delete(request, post_id):
     """deletes the post"""
     BlogPost.objects.get(id=post_id).delete()
     return redirect("blogs:dashboard")
+
+@login_required
+def full_post(request, post_id):
+    """Renders the post in its full shape and show its comments"""
+    post = BlogPost.objects.get(id=post_id)
+    comments = Comments.objects.filter(post=post).order_by("-date_added")
+    context = {'post' : post, 'comments' : comments }
+    return render(request, 'blogs/full_post.html', context)
