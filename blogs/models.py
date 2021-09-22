@@ -15,6 +15,7 @@ class BlogPost(models.Model):
         else:
             return (f"{self.title}, {self.text}")
 
+
 class Comments(models.Model):
     """Contains text and the date of the user's comment"""
     text = models.TextField()
