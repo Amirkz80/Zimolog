@@ -1,5 +1,6 @@
 {% extends "blogs/base.html" %}
 
+{% load bootstrap5 %}
 
 {% block page_header %}
     
@@ -7,6 +8,12 @@
 
 
 {% block content %}
+  
+  <style>
+  #comment_btn{
+    color: whitesmoke;
+  }
+  </style>
 
   <div class="card">
     <div class="card-body bg-secondary">
@@ -17,27 +24,35 @@
 
     <div class="card-footer border-info bg-secondary">
       <div class="text-white text-end">
-        {{post.owner}} posted at : {{ post.date_added|date:'M d, Y H:i' }}
+        {{post.owner}} posted at  &nbsp;<small>{{ post.date_added|date:'M d, Y H:i' }}</small>
       </div>
     </div>
   </div>
+  
+  <br></br>
+  <h4 class="text-secondary mb-3">Comments : </h4>
+  <div class="card mb-4 border-light border-bottom"> 
+    
 
-  <div class="mb-2 border-info border-bottom"></div>
-  <div class="mb-4"></div>
+    <!--The add comment section-->  
+    <a class="d-flex justify-content-center btn bg-success" href="{% url 'blogs:add_comment' post.id %}" id="comment_btn">
+    <span class="text-white">Add Comment</span>
+    </a>
 
-  <div class="card mb-4 border-dark border-bottom"> 
-    <div class="card-body bg-success">
-      
+    <div class="card-body bg-secondary">
+
       {% for comment in comments %}
         <div class="mb-1"></div>
-        <div class="text-white text-end">
-        {{comment.owner}} said at : {{ comment.date_added|date:'M d, Y H:i' }}
+        <div class="text-white">
+        {{comment.owner}} said at : <small class="text-dark">{{ comment.date_added|date:'M d, Y H:i' }}</small>
         </div>
         <div class="mb-4"></div>
         <h6 class="text-light">{{ comment.text }}</h6>
-        <div class="border-bottom"></div>
+        <div class="border-bottom mb-3  "></div>
       {% empty %}
-      <h5>There is no comments yet . submit one!</h5>
+      <h5 class="text-light">
+        There is no comments yet, submit one!
+      </h5>
       {% endfor %}  
     </div>
   </div>

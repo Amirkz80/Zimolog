@@ -36,15 +36,9 @@
     <div class="card mb-4 border-dark border-bottom">
       
       <div class="card-body bg-secondary">
-        <h4 class="text-light">- {{ result.title }}</h4>
+        <h4><a class="text-light" href="{% url 'blogs:full_post' result.id %}">- {{ result.title }}</a></h4>
         <br></br>
         <h6 class="text-light mb-5">{{ result.text|linebreaks }}</h6>
-        <p>
-        <a class="btn btn-info" id="editbutton"
-         href="{% url 'blogs:edit_post' result.id %}">
-          <span id="btntext">Edit post</span>
-        </a>
-        </p>
       </div>
     
     <div class="card-footer border-light bg-secondary">
