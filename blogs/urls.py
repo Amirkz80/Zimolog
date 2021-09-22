@@ -19,4 +19,6 @@ urlpatterns= [
     path('delete/<int:post_id>/', views.delete, name='delete'),
     # page that shows full post with its comments
     path('post/<int:post_id>', views.full_post, name='full_post'),
+    # adds a comment
+    path('add_comment/<int:post_id>', views.add_comment, name='add_comment'),
 ]
