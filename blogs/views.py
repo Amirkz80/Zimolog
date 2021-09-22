@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from .models import BlogPost, Comments
-from .forms import BlogPostForm
+from .forms import BlogPostForm, CommentsForm
 
 
 def index(request):
@@ -77,8 +77,10 @@ def search(request):
 @login_required
 def dashboard(request):
     """Shows user's informations and posts"""
+    date_joined = request.user.date_joined
     user_posts = BlogPost.objects.filter(owner=request.user).order_by("-date_added")
-    context = {'user_posts' : user_posts}
+    context = {'user_posts' : user_posts, 'date_joined' : date_joined}
+
     return render(request, 'blogs/dashboard.html', context)
 
 
@@ -86,12 +88,36 @@ def dashboard(request):
 def delete(request, post_id):
     """deletes the post"""
     BlogPost.objects.get(id=post_id).delete()
+
     return redirect("blogs:dashboard")
 
-@login_required
+
 def full_post(request, post_id):
     """Renders the post in its full shape and show its comments"""
     post = BlogPost.objects.get(id=post_id)
     comments = Comments.objects.filter(post=post).order_by("-date_added")
     context = {'post' : post, 'comments' : comments }
     return render(request, 'blogs/full_post.html', context)
+
+
+@login_required
+def add_comment(request, post_id):
+    """Adds a comment to the post"""
+    post = BlogPost.objects.get(id=post_id)
+
+    if request.method != 'POST':
+        # there is no submitted data so the form is blank
+        form = CommentsForm()
+    else:
+        # proccessing data
+        form = CommentsForm(data=request.POST)
+        if form.is_valid():
+            new_comment = form.save(commit=False)
+            new_comment.owner = request.user
+            new_comment.post = post
+            new_comment = form.save()
+            return redirect('blogs:index')
+
+    context = {'form' : form, 'post' : post}
+    return render(request, 'blogs/add_comment.html', context)
+
