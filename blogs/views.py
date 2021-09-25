@@ -117,7 +117,7 @@ def add_comment(request, post_id):
             new_comment.owner = request.user
             new_comment.post = post
             new_comment = form.save()
-            return redirect('blogs:index')
+            return redirect('blogs:full_post', post_id)
 
     context = {'form' : form, 'post' : post}
     return render(request, 'blogs/add_comment.html', context)
