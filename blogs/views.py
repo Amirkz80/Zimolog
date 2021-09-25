@@ -1,3 +1,4 @@
+import time
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
@@ -88,7 +89,7 @@ def dashboard(request):
 def delete(request, post_id):
     """deletes the post"""
     BlogPost.objects.get(id=post_id).delete()
-
+    time.sleep(0.2)
     return redirect("blogs:dashboard")
 
 
