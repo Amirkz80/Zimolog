@@ -10,7 +10,8 @@
 
 
 {% block content %}
-
+  
+  <!--add post form-->
   <form class="form" action="{% url 'blogs:add_comment' post.id %}" method="post">
     {% csrf_token %}
     {% bootstrap_form form %}
