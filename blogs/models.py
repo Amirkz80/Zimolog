@@ -6,7 +6,9 @@ class BlogPost(models.Model):
     title = models.CharField(max_length=200)
     text = models.TextField()
     date_added = models.DateTimeField(auto_now_add=True)
+    heart = models.PositiveIntegerField(default=0)
     owner = models.ForeignKey(User,on_delete=models.CASCADE)
+    people_who_liked = models.JSONField(default=list)
 
     def __str__(self):
         """Retrurns a represntation of the model"""
