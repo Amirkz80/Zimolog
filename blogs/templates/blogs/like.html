@@ -1,0 +1,17 @@
+{% extends "blogs/base.html" %}
+
+{% block content %}
+  
+  {% if flag is 1 %}
+  <h1>You liked this post</h2>
+  <br></br>
+  {% else %}
+  <h1>You disliked this post</h2>
+  <br></br>
+  {% endif %}
+
+  <h2>Main page : <button name="submit">
+  <a href="{% url 'blogs:index' %}">Home</a>
+  </h2></button>  
+
+{% endblock content %}
