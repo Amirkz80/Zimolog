@@ -122,3 +122,29 @@ def add_comment(request, post_id):
     context = {'form' : form, 'post' : post}
     return render(request, 'blogs/add_comment.html', context)
 
+@login_required
+def like(request, post_id):
+    """Increase post's hearts by one,if user's voted already decrease by one"""
+    post = BlogPost.objects.get(id=post_id)
+    user_name = str(request.user)
+
+    #If user has liked before, decreases hearts by one
+    if user_name in post.people_who_liked:
+        post.people_who_liked.remove(user_name)
+        post.heart = post.heart - 1
+        post.save()
+        flag = 0 
+        context = {'flag' : flag}
+        return render(request, 'blogs/like.html', context)
+
+    #If user hasn't liked before,increases hearts by one
+    else:
+        if bool(post.people_who_liked) is False:
+            post.people_who_liked = []
+        post.people_who_liked.append(user_name)
+        post.heart = post.heart + 1
+        post.save()
+        flag = 1
+        context = {'flag' : flag}
+        return render(request, 'blogs/like.html', context)
+        
