@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from blogs.models import BlogPost
 
 def register(request):
@@ -37,3 +38,11 @@ def dashboard(request):
 
     context = {'user_posts' : user_posts, 'date_joined' : date_joined}
     return render(request, 'registration/dashboard.html', context)
+
+@login_required
+def followers(request,user_name):
+    """Shows user's followers"""
+    user = User.objects.get(username=user_name)
+
+    context = {'user' : user}
+    return render(request, 'registration/followers.html', context)
