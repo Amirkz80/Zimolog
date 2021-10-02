@@ -9,5 +9,9 @@ urlpatterns =[
     path('', include('django.contrib.auth.urls')),
     # Registering new user.
     path('register/', views.register, name='register'),
-    path('logout/', views.logged_out, name='logged_out')
+    # A page to see logging out result
+    path('logout/', views.logged_out, name='logged_out'),
+     # page that shows user's profile and posts
+    path('dashboard/', views.dashboard, name='dashboard'),
+    # The authenticated_user followers page
 ] 
