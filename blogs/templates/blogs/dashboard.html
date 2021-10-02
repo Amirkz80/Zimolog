@@ -4,10 +4,13 @@
 {% block page_header %}
   
     <h1 class="mb-3" id="" >
-    This is your dashboard</h1>
+    {{user.username}}
+    </h1>
     <h3 class="text-success"><small>Date joined = {{ date_joined | date:'M d, Y H:i'}}</small></h3>
-
-{% endblock page_header %}
+    <br></br>
+    <button class="btn btn-primary">Followers {{user.userinfo.followers_number}}</button>
+    <button class="btn btn-primary">Followings {{user.userinfo.following_number}}</button>
+    {% endblock page_header %}
 
 
 {% block content %}
