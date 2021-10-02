@@ -14,5 +14,7 @@ urlpatterns =[
      # page that shows user's profile and posts
     path('dashboard/', views.dashboard, name='dashboard'),
     # The authenticated_user followers page
-    path('users/<str:user_name>', views.followers, name='followers'),
+    path('<str:user_name>/followers', views.followers, name='followers'),
+    # The authenticated_user followeing page
+    path('<str:user_name>/following', views.following, name='following'),
 ] 
