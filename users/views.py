@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from blogs.models import BlogPost
 
 def register(request):
     """Registers new user"""
@@ -21,7 +23,18 @@ def register(request):
     context = {'form': form}
     return render(request, 'registration/register.html', context)
 
+
 def logged_out(request):
     """logging out"""
     logout(request)
-    return redirect(request, 'registration/logged_out') 
+    return redirect(request, 'registration/logged_out')
+
+
+@login_required
+def dashboard(request):
+    """Returns authentiacted user's informations and posts"""
+    date_joined = request.user.date_joined
+    user_posts = BlogPost.objects.filter(owner=request.user).order_by("-date_added")
+
+    context = {'user_posts' : user_posts, 'date_joined' : date_joined}
+    return render(request, 'registration/dashboard.html', context)
