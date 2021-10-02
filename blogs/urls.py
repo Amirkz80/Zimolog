@@ -13,8 +13,6 @@ urlpatterns= [
     path('prompt/', views.edit_post, name='prompt'),
     # page that shows serach results
     path('search/', views.search, name='search'),
-    # page that shows user's profile and posts
-    path('dashboard/', views.dashboard, name='dashboard'),
     # deletes the post
     path('delete/<int:post_id>/', views.delete, name='delete'),
     # page that shows full post with its comments
