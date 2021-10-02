@@ -26,7 +26,6 @@ def register(request):
 
 def logged_out(request):
     """logging out"""
-    logout(request)
     return redirect(request, 'registration/logged_out')
 
 
