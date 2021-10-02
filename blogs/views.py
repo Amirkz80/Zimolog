@@ -7,9 +7,9 @@ from .models import BlogPost, Comments
 from .forms import BlogPostForm, CommentsForm
 
 # A function to get followings and followers of the user
-def user_profile(user=''):
-    user_id =  UserInfo.objects.get(user).id
-    users_info = UserInfo.objects.all()
+def user_profile(user):
+    user_id =  user.id
+    user_info = UserInfo.objects.all()
     return (user_info[user_id])
 
 def index(request):
