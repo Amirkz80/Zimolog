@@ -9,7 +9,7 @@
     <h3 class="text-successsmall"><small>Date</small><h3>
     <br></br> 
     <a class="btn btn-primary" href="{% url 'users:followers' user.username %}">Followers {{user.userinfo.followers_number}}</a>
-    <button class="btn btn-primary">Followings {{user.userinfo.following_number}}</button>
+    <a class="btn btn-primary" href="{% url 'users:following' user.username %}">Following {{user.userinfo.following_number}}</a>
 
 {% endblock page_header %}
 
