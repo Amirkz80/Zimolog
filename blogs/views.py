@@ -2,9 +2,15 @@ import time
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
+from users.models import UserInfo
 from .models import BlogPost, Comments
 from .forms import BlogPostForm, CommentsForm
 
+# A function to get followings and followers of the user
+def user_profile(user=''):
+    user_id =  UserInfo.objects.get(user).id
+    users_info = UserInfo.objects.all()
+    return (user_info[user_id])
 
 def index(request):
     """Shows the posts in the main page"""
@@ -77,17 +83,20 @@ def search(request):
 
 @login_required
 def dashboard(request):
-    """Shows user's informations and posts"""
+    """Returns authentiacted user's informations and posts"""
     date_joined = request.user.date_joined
     user_posts = BlogPost.objects.filter(owner=request.user).order_by("-date_added")
-    context = {'user_posts' : user_posts, 'date_joined' : date_joined}
+
+    # Calling user_profile function
+    user_info = user_profile(request.user)
+    context = {'user_posts' : user_posts, 'date_joined' : date_joined, 'user_info' : user_info}
 
     return render(request, 'blogs/dashboard.html', context)
 
 
 @login_required
 def delete(request, post_id):
-    """deletes the post"""
+    """Deletes the post"""
     BlogPost.objects.get(id=post_id).delete()
     time.sleep(0.2)
     return redirect("blogs:dashboard")
