@@ -7,10 +7,6 @@ from .models import BlogPost, Comments
 from .forms import BlogPostForm, CommentsForm
 
 
-# A function to get followings and followers of the user
-def user_profile(user):
-    return (user.userinfo)
-
 def index(request):
     """Shows the posts in the main page"""
     posts = BlogPost.objects.order_by('-date_added')
