@@ -81,4 +81,48 @@ def user_info(request, user_name):
     user = get_user_info(request, user_name)
     posts = user.blogpost_set.order_by("-date_added")
     context = {'user' : user, 'posts' : posts}
-    return render(request, 'user/user_info.html', context)       
+    return render(request, 'user/user_info.html', context)
+
+
+@login_required
+def follow_unfollow(request, user_name):
+    """"Adds current user to selected user's followers or remove it from that"""
+    current_usernname = request.user.username
+    selected_username = user_name
+    currnet_user_info = request.user.userinfo
+    selected_user_info = User.objects.get(username='user_name').userinfo 
+    
+    #If user is already in selected user's followers, does unfollow
+    if current_usernname in selected_user_info.followers:
+        selected_user_info.followers.remove(current_usernname)
+        selected_user_info.followers_number = selected_user_info.followers_number - 1
+        selected_user_info.save(update_fields=['followers', 'followers_number'])
+        
+        currnet_user_info.following.remove(selected_username)
+        currnet_user_info.following_number = currnet_user_info.following_number - 1
+        currnet_user_info.save(update_fields=['following', 'following_number'])
+
+        flag = 0 
+        context = {'flag' : flag}
+        return render(request, 'users/follow_unfollow.html', context)
+
+    #If user is not in selected user's followers, does unfollow
+    else:
+
+        # Making empty lists if these to lists have no member
+        if bool(selected_user_info.followers) is False:
+            selected_user_info.followers = []
+        if bool(currnet_user_info.following) is False:
+            currnet_user_info.followers = []    
+        
+        selected_user_info.followers.append(current_usernname)
+        selected_user_info.followers_number = selected_user_info.followers_number + 1
+        selected_user_info.save(update_fileds=['followers', 'followers_number'])
+        
+        currnet_user_info.following.append(selected_username)
+        currnet_user_info.following_number = currnet_user_info.following_number + 1
+        currnet_user_info.save(update_fields=['following', 'following_number'])
+
+        flag = 1
+        context = {'flag' : flag}
+        return render(request, 'users/follow_unfollow.html', context)
