@@ -1,0 +1,54 @@
+{% extends "blogs/base.html" %}
+
+
+{% block page_header %}
+
+    <h1 class="mb-3"> 
+    {{user.username}}
+    </h1>
+    <h3 class="text-successsmall"><small>Date</small><h3>
+    <br></br> 
+    <a class="btn btn-primary" href="{% url 'users:followers' user.username %}">Followers {{user.userinfo.followers_number}}</a>
+    <a class="btn btn-primary" href="{% url 'users:following' user.username %}">Following {{user.userinfo.following_number}}</a>
+
+{% endblock page_header %}
+
+
+{% block content %}
+
+
+  {% if posts %}
+    <div>
+      <h2 class="mb-5">{{ user.username }}'s posts</h2>
+    </div>
+  {% endif %}
+
+
+  {% for post in posts %}
+    <div class="card mb-4 border-dark border-bottom">
+      
+      <div class="card-body bg-secondary">
+        <h4 class="text-light- {{ post.title }}">{{ post.title }}</h4>
+        <br></br>
+        <h6 class="text-light mb-5{{ post.textlinebreaks }}">{{ post.text }}</h6>
+      
+      <div class="card-footer border-info bg-secondary">
+        <div class="text-white text-end">
+            {{ post.owner }} posted at  
+        </div>
+      </div>
+      
+      </div>
+    </div>
+
+    <div class="mb-2 border-info border-bottom"></div>
+    <div class="mb-4"></div> 
+  
+  {% empty %}
+  <h2 class="text-info">
+  {{ user.username}} hasn't added any post .
+  </h2>   
+  {% endfor %}
+
+
+{% endblock content %}  
