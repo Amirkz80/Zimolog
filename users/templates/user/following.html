@@ -28,7 +28,7 @@
     <div class="card mb-4 border-dark border-bottom">
       
       <div class="card-body bg-secondary">
-        <h4><a class="text-light" href="#">- {{ following }}</a></h4>
+        <h4><a class="text-light" href="{% url 'users:user_info' following %}">- {{ following }}</a></h4>
       </div>
 
     </div>
