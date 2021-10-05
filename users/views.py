@@ -7,8 +7,8 @@ from users.models import UserInfo
 from blogs.models import BlogPost
 
 
-def get_user_info(req, user_name_string):
-    """"Gets UserInfo that is conected to the the user"""
+def get_user(user_name_string):
+    """"Gets User from data base through its username"""
     user = User.objects.get(username=user_name_string)
     return (user)
 
@@ -57,7 +57,7 @@ def dashboard(request):
 @login_required
 def followers(request,user_name):
     """Shows user's followers"""
-    user = get_user_info(request, user_name)
+    user = get_user(user_name)
     context ={'user' : user}
     return render(request, 'user/followers.html', context)
 
@@ -65,7 +65,7 @@ def followers(request,user_name):
 @login_required
 def following(request,user_name):
     """Shows user's following"""
-    user = get_user_info(request, user_name)
+    user = get_user(user_name)
     context = {'user' : user}
     return render(request, 'user/following.html', context)
 
@@ -78,9 +78,9 @@ def user_info(request, user_name):
     if request.user.username == user_name:
         return redirect('users:dashboard')
     
-    user = get_user_info(request, user_name)
+    user = get_user(user_name)
     posts = user.blogpost_set.order_by("-date_added")
-    context = {'user' : user, 'posts' : posts}
+    context = {'requested_user' : user, 'posts' : posts}
     return render(request, 'user/user_info.html', context)
 
 
@@ -90,7 +90,7 @@ def follow_unfollow(request, user_name):
     current_usernname = request.user.username
     selected_username = user_name
     currnet_user_info = request.user.userinfo
-    selected_user_info = User.objects.get(username='user_name').userinfo 
+    selected_user_info = get_user(user_name).userinfo 
     
     #If user is already in selected user's followers, does unfollow
     if current_usernname in selected_user_info.followers:
@@ -103,12 +103,11 @@ def follow_unfollow(request, user_name):
         currnet_user_info.save(update_fields=['following', 'following_number'])
 
         flag = 0 
-        context = {'flag' : flag}
-        return render(request, 'users/follow_unfollow.html', context)
+        context = {'flag' : flag, 'user_name' : selected_username}
+        return render(request, 'user/follow_unfollow.html', context)
 
     #If user is not in selected user's followers, does unfollow
     else:
-
         # Making empty lists if these to lists have no member
         if bool(selected_user_info.followers) is False:
             selected_user_info.followers = []
@@ -117,12 +116,12 @@ def follow_unfollow(request, user_name):
         
         selected_user_info.followers.append(current_usernname)
         selected_user_info.followers_number = selected_user_info.followers_number + 1
-        selected_user_info.save(update_fileds=['followers', 'followers_number'])
+        selected_user_info.save(update_fields=['followers', 'followers_number'])
         
         currnet_user_info.following.append(selected_username)
         currnet_user_info.following_number = currnet_user_info.following_number + 1
         currnet_user_info.save(update_fields=['following', 'following_number'])
 
         flag = 1
-        context = {'flag' : flag}
-        return render(request, 'users/follow_unfollow.html', context)
+        context = {'flag' : flag, 'user_name' : selected_username}
+        return render(request, 'user/follow_unfollow.html', context)
