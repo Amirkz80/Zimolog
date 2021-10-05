@@ -17,4 +17,6 @@ urlpatterns =[
     path('<str:user_name>/followers', views.followers, name='followers'),
     # The authenticated_user followeing page
     path('<str:user_name>/following', views.following, name='following'),
+    # The page that shows user's(not authenticated one!) page
+    path('<str:user_name>/', views.user_info, name='user_info')
 ] 
