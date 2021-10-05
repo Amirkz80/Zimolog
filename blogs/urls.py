@@ -19,6 +19,6 @@ urlpatterns= [
     path('post/<int:post_id>', views.full_post, name='full_post'),
     # adds a comment
     path('add_comment/<int:post_id>', views.add_comment, name='add_comment'),
-    # like a post
+    # like or dislike a post
     path('like/<int:post_id>', views.like, name='like'),
 ]
