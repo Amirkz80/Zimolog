@@ -20,5 +20,5 @@ urlpatterns =[
     # The page that shows user's(not authenticated one!) page
     path('<str:user_name>/', views.user_info, name='user_info'),
     # page that informs users if they followed or unfollowed somone else
-    path('<str:user_name>/', views.follow_unfollow, name='follow_unfollow' )
+    path('<str:user_name>/follow_status', views.follow_unfollow, name='follow_unfollow' )
 ] 
