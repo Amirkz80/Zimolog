@@ -4,14 +4,20 @@
 {% block page_header %}
 
     <h1 class="mb-3"> 
-    {{user.username}}
+    {{ requested_user.username}}
     </h1>
     <h3 class="text-successsmall"><small>Date</small><h3>
     <br></br> 
-    <a class="btn btn-primary" href="{% url 'users:followers' user.username %}">Followers {{user.userinfo.followers_number}}</a>
-    <a class="btn btn-primary" href="{% url 'users:following' user.username %}">Following {{user.userinfo.following_number}}</a>
+    <a class="btn btn-primary" href="{% url 'users:followers' requested_user.username %}">Followers {{requested_user.userinfo.followers_number}}</a>
+    <a class="btn btn-primary" href="{% url 'users:following' requested_user.username %}">Following {{requested_user.userinfo.following_number}}</a>
+  
+    {% if request.user.username in requested_user.userinfo.followers %}
+    <a class="btn btn-dark" href="{% url 'users:follow_unfollow' requested_user.username %}">Unfollow</a>
+    {% else %}
+    <a class="btn btn-dark" href="{% url 'users:follow_unfollow' requested_user.username %}">Follow</a>
+    {% endif %}
 
-{% endblock page_header %}
+    {% endblock page_header %}
 
 
 {% block content %}
@@ -19,7 +25,7 @@
 
   {% if posts %}
     <div>
-      <h2 class="mb-5">{{ user.username }}'s posts</h2>
+      <h2 class="mb-5">{{ requested_user.username }}'s posts</h2>
     </div>
   {% endif %}
 
@@ -46,7 +52,7 @@
   
   {% empty %}
   <h2 class="text-info">
-  {{ user.username}} hasn't added any post .
+  {{ requested_user.username}} hasn't added any post .
   </h2>   
   {% endfor %}
 
