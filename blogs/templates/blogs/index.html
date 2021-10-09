@@ -68,7 +68,7 @@
 
         <div class="card-footer border-info bg-secondary">
           <div class="text-white text-end">
-            <a class="text-white" href="{% url 'users:user_info' post.owner.username %}">{{post.owner}}</a> posted at : {{ post.date_added|date:'M d, Y H:i' }}
+            <a class="text-white" href="{% url 'users:user_info' post.owner.username %}">{{post.owner}}</a> {{ post.date_added }}
           </div>
         </div>
       </div>

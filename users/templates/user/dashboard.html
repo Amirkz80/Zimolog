@@ -3,10 +3,10 @@
 
 {% block page_header %}
 
-    <h1 class="mb-3"> 
+    <h1 class="mb-3 text-center"> 
     {{user.username}}
     </h1>
-    <h3 class="text-successsmall"><small>Date</small><h3>
+    <h3 class="text-successsmall text-center"><small>{{ join_message }}</small><h3>
     <br></br> 
     <a class="btn btn-primary" href="{% url 'users:followers' user.username %}">Followers {{user.userinfo.followers_number}}</a>
     <a class="btn btn-primary" href="{% url 'users:following' user.username %}">Following {{user.userinfo.following_number}}</a>
@@ -15,7 +15,6 @@
 
 
 {% block content %}
-
 
   {% if user_posts %}
     <div>
@@ -77,7 +76,7 @@
       
       <div class="card-footer border-info bg-secondary">
         <div class="text-white text-end">
-            You posted at  
+            You {{ post.date_added }}  
         </div>
       </div>
     
