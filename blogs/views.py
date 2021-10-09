@@ -1,19 +1,24 @@
 import time
+from datetime import datetime
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from users.models import UserInfo
 from .models import BlogPost, Comments
 from .forms import BlogPostForm, CommentsForm
-
+from users.views import calculate_time
 
 def index(request):
     """Shows the posts in the main page"""
     posts = BlogPost.objects.order_by('-date_added')
+    now = datetime.utcnow()
     for post in posts:
         if len(post.text) > 140 :
-            post.text = f"{post.text[:140]}..."
-    context = {'posts' : posts}
+            post.text = f"{post.text[:140]}..." 
+        post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword="posted")
+
+    context = {'posts' : posts, 'now' : now}
+
 
     return render(request, 'blogs/index.html', context)
 
@@ -88,6 +93,9 @@ def full_post(request, post_id):
     """Renders the post in its full shape and show its comments"""
     post = BlogPost.objects.get(id=post_id)
     comments = Comments.objects.filter(post=post).order_by("-date_added")
+
+    post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword="posted")
+
     context = {'post' : post, 'comments' : comments }
     return render(request, 'blogs/full_post.html', context)
 
