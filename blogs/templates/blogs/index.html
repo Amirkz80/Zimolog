@@ -23,7 +23,11 @@
 {% block content %}
   
   <div id="latest_posts">
-    <h2 class="mb-5 text-info">Latest Posts :</h2>
+    {% if user.is_authenticated %}
+      <h2 class="mb-5 text-info">Your TimeLine :</h2>
+    {% else %}
+      <h2 class="mb-5 text-info">Latest Posts:</h2>    
+    {% endif %}
   </div>
 
     <!--post-->
@@ -76,7 +80,13 @@
       <div class="mb-2 border-info border-bottom"></div>
       <div class="mb-4"></div> 
     {% empty %}
-    <h1 class="text-success" id="nopost">There hasn't been any post yet!</h1>   
+  
+      {% if user.is_authenticated %}
+        <h1 class="text-success" id="nopost">Your TimeLine is empty, start following others to see their posts here !</h1>   
+      {% else %}
+        <h1 class="text-success" id="nopost">There hasn't been any posts yet !</h1>
+      {% endif %}
+
     {% endfor %}
 
 {% endblock content %}
