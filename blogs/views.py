@@ -10,15 +10,25 @@ from users.views import calculate_time
 
 def index(request):
     """Shows the posts in the main page"""
-    posts = BlogPost.objects.order_by('-date_added')
-    now = datetime.utcnow()
-    for post in posts:
-        if len(post.text) > 140 :
-            post.text = f"{post.text[:140]}..." 
-        post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword="posted")
-
-    context = {'posts' : posts, 'now' : now}
-
+    if request.user.is_authenticated == False :
+        posts = BlogPost.objects.order_by('-date_added')
+        now = datetime.utcnow()
+        for post in posts:
+            if len(post.text) > 140 :
+                post.text = f"{post.text[:140]}..." 
+            post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword="posted")
+        context = {'posts' : posts, 'now' : now}
+    
+    else:
+        user_timeline_posts = []
+        posts = BlogPost.objects.all().order_by("-date_added")
+        for post in posts:
+            if post.owner.username in request.user.userinfo.following:
+                if len(post.text) > 140 :
+                    post.text = f"{post.text[:140]}..." 
+                post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword="posted")
+                user_timeline_posts.append(post)
+        context = {'posts' : user_timeline_posts}
 
     return render(request, 'blogs/index.html', context)
 
@@ -126,7 +136,7 @@ def add_comment(request, post_id):
 def like(request, post_id):
     """Increase post's hearts by one,if user's voted already decrease by one"""
     post = BlogPost.objects.get(id=post_id)
-    user_name = str(request.user)
+    user_name = str(request.user.username)
 
     #If user has liked before, decreases hearts by one
     if user_name in post.people_who_liked:
@@ -147,4 +157,27 @@ def like(request, post_id):
         flag = 1
         context = {'flag' : flag}
         return render(request, 'blogs/like.html', context)
-        
+
+@login_required
+def discover(request, sort_type=''):
+    """Sorts posts by their time or their hearts"""
+    if sort_type == 'time' :    
+        posts = BlogPost.objects.order_by("-date_added")
+        for post in posts:
+            if len(post.text) > 140 :
+                post.text = f"{post.text[:140]}..." 
+            post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword="posted")
+        # a flag for html page
+        flag = 'time'
+
+
+    if sort_type == 'heart' or sort_type == '':
+        posts = BlogPost.objects.order_by("-heart")
+        for post in posts:
+            if len(post.text) > 140 :
+                post.text = f"{post.text[:140]}..." 
+            post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword="posted")
+        flag = 'heart'
+
+    context = {'posts' : posts, 'flag' : flag}
+    return render(request, 'blogs/discover.html', context)    
