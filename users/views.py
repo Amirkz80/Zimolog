@@ -170,7 +170,7 @@ def follow_unfollow(request, user_name):
 
         flag = 0 
         context = {'flag' : flag, 'user_name' : selected_username}
-        return render(request, 'user/follow_unfollow.html', context)
+        return redirect('users:user_info', user_name)
 
     #If user is not in selected user's followers, does unfollow
     else:
@@ -190,4 +190,4 @@ def follow_unfollow(request, user_name):
 
         flag = 1
         context = {'flag' : flag, 'user_name' : selected_username}
-        return render(request, 'user/follow_unfollow.html', context)
+        return redirect('users:user_info', user_name)
