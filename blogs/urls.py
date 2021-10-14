@@ -21,4 +21,8 @@ urlpatterns= [
     path('add_comment/<int:post_id>', views.add_comment, name='add_comment'),
     # like or dislike a post
     path('like/<int:post_id>', views.like, name='like'),
+    # discover page
+    path('discover/', views.discover, name='discover'),
+    # discover page by hearts
+    path('discover/<str:sort_type>', views.discover, name='discover')
 ]
