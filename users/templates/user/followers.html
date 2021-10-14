@@ -4,7 +4,7 @@
 {% block page_header %}
   
   {% if user.userinfo.followers %}
-    <h1 class="text-success">
+    <h1 class="text-dark">
     followers
     </h1>
   {% else %}
@@ -20,21 +20,16 @@
 
   {% if user.userinfo.followers %}
     <div>
-      <h2 class="mb-5 text-info">people who follow you :</h2>
+      <h2 class="mb-5 text-dark">people who follow you :</h2>
     </div>
   {% endif %}
 
   {% for follower in user.userinfo.followers %}
-    <div class="card mb-4 border-dark border-bottom">
-      
-      <div class="card-body bg-secondary">
-        <h4><a class="text-light" href="{% url 'users:user_info' follower %}">- {{ follower }}</a></h4>
-      </div>
-
-    </div>
-    <div class="mb-2 border-info border-bottom"></div>
-    <div class="mb-4"></div> 
-  
+  <div class="list-group list-group-flush">
+    <a href="{% url 'users:user_info' follower %}" class="list-group-item list-group-item-secondary list-group-item-action border-bottom border-dark">
+      <h3 class="text-dark" style="font-family: Georgia, 'Times New Roman', Times, serif;">{{follower}}</h3>
+    </a>
+  </div>
   {% empty %}
 
   {% endfor %}
