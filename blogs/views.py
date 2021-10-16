@@ -2,28 +2,31 @@ import time
 from datetime import datetime
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.http import Http404
 from users.models import UserInfo
 from .models import BlogPost, Comments
 from .forms import BlogPostForm, CommentsForm
 from users.views import calculate_time
 
+
 def index(request):
     """Shows the posts in the main page"""
     if request.user.is_authenticated == False :
         posts = BlogPost.objects.order_by('-date_added')
-        now = datetime.utcnow()
         for post in posts:
             if len(post.text) > 140 :
                 post.text = f"{post.text[:140]}..." 
             post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword="posted")
-        context = {'posts' : posts, 'now' : now}
+        context = {'posts' : posts}
+
     
     else:
         user_timeline_posts = []
         posts = BlogPost.objects.all().order_by("-date_added")
         for post in posts:
-            if post.owner.username in request.user.userinfo.following:
+            # Check to only show posts from whome user follows and shwo h/h posts
+            if post.owner.username in request.user.userinfo.following or post.owner.username == request.user.username:
                 if len(post.text) > 140 :
                     post.text = f"{post.text[:140]}..." 
                 post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword="posted")
@@ -81,13 +84,29 @@ def search(request):
     #getting user's search keyword
     key = request.GET.get('search')
 
-    results = []
+    post_results = []
+    user_results = []
+    flag = True
+
+    # search key in the users and posts in database
     posts = BlogPost.objects.order_by('-date_added')
     for post in posts:
         if (key.lower() in post.text.lower()) or (key.lower() in post.title.lower()):
-            results.append(post)
+            post_results.append(post)
+    users = User.objects.all()
+    for user in users:
+        if (key.lower() in user.username.lower()):
+            user_results.append(user)
 
-    context = {'results' : results, 'key' : key}
+    # Check if both user and post results are empty   
+    if post_results == [] and user_results == []:
+        flag = False
+
+    # Calculating postst's time 
+    for post in posts :  
+        post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword=('posted'))
+
+    context = {'posts' : post_results, 'users' : user_results, 'key' : key, 'flag' : flag}
     return render(request, 'blogs/results.html', context)
 
 
