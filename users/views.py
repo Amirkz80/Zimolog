@@ -142,9 +142,14 @@ def user_info(request, user_name):
     if request.user.username == user_name:
         return redirect('users:dashboard')
     
+    # calculating the time that user has joined the blog
     user = get_user(user_name)
     posts = user.blogpost_set.order_by("-date_added")
-    join_message = calculate_time(user.date_joined, datetime.utcnow(), keyword="posted")
+    join_message = calculate_time(user.date_joined, datetime.utcnow(), keyword="joined")
+
+    # Calculating the time that user's posts has been posted by user
+    for post in posts:
+        post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword='posted')
 
     context = {'requested_user' : user, 'posts' : posts, 'join_message' : join_message}
     return render(request, 'user/user_info.html', context)
