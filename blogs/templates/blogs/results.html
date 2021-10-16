@@ -3,6 +3,7 @@
 
 {% block page_header %}
   
+  <!--Stylization part-->
   <style>
     #editbutton, #posts, #resultsfor, #noresults, #nopost{
     font-family: "Times New Roman";
@@ -13,49 +14,89 @@
     }
   </style>
 
-  {% if results %}
-    <h1 class="text-success" id="resultsfor" >
-    Search Results for "{{ key }}" </h1>
+  <!--Check if any result's been found or not-->
+  {% if flag is False %}
+    <h1 class="text-success" id="noresults">
+    No result</h1>
+
   {% else %}
-    <h1 class="text-success" id="noresults" >
-    No results</h1>
+    <h1 class="text-success" id="resultsfor">
+    Search Results for "{{ key }}" </h1>
+
   {% endif %}
+
 
 {% endblock page_header %}
 
 
 {% block content %}
 
-  {% if results %}
-    <div id="posts">
-      <h2 class="mb-5 text-info">posts :</h2>
-    </div>
-  {% endif %}
-
-  {% for result in results %}
-    <div class="card mb-4 border-dark border-bottom">
-      
-      <div class="card-body bg-secondary">
-        <h4><a class="text-light" href="{% url 'blogs:full_post' result.id %}">- {{ result.title }}</a></h4>
-        <br></br>
-        <h6 class="text-light mb-5">{{ result.text|linebreaks }}</h6>
-      </div>
-    
-    <div class="card-footer border-light bg-secondary">
-      <div class="text-white text-end">
-          {{result.owner}} posted at : {{ result.date_added|date:'M d, Y H:i' }}
-          </div>
-      </div>
-    </div>  
-
-    </div>
-    <div class="mb-2 border-info border-bottom"></div>
-    <div class="mb-4"></div> 
-  
-  {% empty %}
+  <!--If flag is falsse then there's been no result found in between users and between posts-->
+  {% if flag is False %}
   <h2 class="text-info" id="nopost">
-  There were no results for "{{ key }}", try a new search.</h2>   
-  {% endfor %}
+    No results found for "{{ key }}" , Try a new search.</h2>
+  
+  {% else %}
 
+    <!--The user results part in the page-->
+    {% if users %}
+      <div id="users">
+        <h2 class="mb-5 text-info">users :</h2>
+      </div>
+    {% endif %}
+
+    {% for user in users %}
+
+      <div class="list-group list-group-flush">
+            <a href="{% url 'users:user_info' user.username %}" class="list-group-item list-group-item-secondary list-group-item-action border-bottom border-dark">
+              <h4 class="text-dark">- {{ user.username }}</h4>
+            </a> 
+      </div> 
+
+    {% empty %}
+
+    <h2 class="text-info" id="nopost">
+    No user found with "{{ key }}", try a new search.</h2>   
+    
+    {% endfor %}
+
+
+    <br></br>
+    <hr>
+
+
+    <!--The posts post part in the page-->
+    {% if posts %}
+      <div id="posts">
+        <h2 class="mb-5 text-info">posts :</h2>
+      </div>
+    {% endif %}
+
+    {% for post in posts %}
+      <div class="card mb-4 border-dark border-bottom">
+        
+        <div class="card-body bg-secondary">
+          <h4><a class="text-light" href="{% url 'blogs:full_post' post.id %}">- {{ post.title }}</a></h4>
+          <br></br>
+          <h6 class="text-light mb-5">{{ post.text|linebreaks }}</h6>
+        </div>
+      
+      <div class="card-footer border-light bg-secondary">
+        <div class="text-white text-end">
+            {{post.owner}} {{ post.date_added }}
+            </div>
+        </div>
+      </div>  
+
+      </div>
+      <div class="mb-2 border-info border-bottom"></div>
+      <div class="mb-4"></div> 
+
+    {% empty %}
+    <h2 class="text-info" id="nopost">
+    We couldn't find any post with "{{ key }}" in it, try a new search.</h2>   
+    {% endfor %}
+  
+  {% endif %}  
 
 {% endblock content %}
