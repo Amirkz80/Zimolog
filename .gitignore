@@ -2,3 +2,4 @@ bl_env/
 __pycache__/
 *.sqlite3
 runserver.bat
+shell.bat
