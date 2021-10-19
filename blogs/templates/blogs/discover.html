@@ -63,7 +63,18 @@
 
         <div class="card-footer border-info bg-secondary">
           <div class="text-white text-end">
-            <a class="text-white" href="{% url 'users:user_info' post.owner.username %}">{{post.owner}}</a> {{ post.date_added }}
+            <a class="text-white" style="text-decoration: none;" href="{% url 'users:user_info' post.owner.username %}">
+
+              {% if post.owner.userinfo.picture.name == 'False' %}
+              <img style="border-radius: 50%;" src="{{ '/media/images/default_pic.png' }}" alt="{{ post.owner.username }}_pic" width="30" height="30">
+            
+              {% else %}
+              <img style="border-radius: 50%;" src="{{ post.owner.userinfo.picture.url }}" alt="{{ post.owner.username }}_pic" width="30" height="30">
+              
+              {% endif %}
+            
+              {{post.owner}}
+            </a> {{ post.date_added }}
           </div>
         </div>
       </div>
