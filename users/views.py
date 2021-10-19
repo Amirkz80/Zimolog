@@ -66,10 +66,24 @@ def calculate_time(object_time, now_time, keyword=''):
 
     return final_string
 
+
+def has_pro_pic(user):
+    """Checks if the user has profile photo or not"""
+    pic_flag = True 
+
+    if user.userinfo.picture.name == 'False':
+        pic_flag = False
+    else:
+        pass
+    
+    return pic_flag
+
+
 def get_user(user_name_string):
     """"Gets User from data base through its username"""
     user = User.objects.get(username=user_name_string)
     return (user)
+
 
 def register(request):
     """Registers new user"""
@@ -121,16 +135,30 @@ def dashboard(request):
 @login_required
 def followers(request,user_name):
     """Shows user's followers"""
-    user = get_user(user_name)
-    context ={'user' : user}
+    current_user = get_user(user_name)
+    all_users = User.objects.all()
+    followers_list = []
+
+    for user in all_users:
+        if user.username in current_user.userinfo.followers:
+            followers_list.append(user)
+
+    context ={'user' : current_user, 'followers' : followers_list}
     return render(request, 'user/followers.html', context)
 
 
 @login_required
 def following(request,user_name):
     """Shows user's following"""
-    user = get_user(user_name)
-    context = {'user' : user}
+    current_user = get_user(user_name)
+    all_users = User.objects.all()
+    following_list = []
+
+    for user in all_users:
+        if user.username in current_user.userinfo.following:
+            following_list.append(user)
+    
+    context = {'user' : current_user, 'followings' : following_list}
     return render(request, 'user/following.html', context)
 
 
