@@ -18,6 +18,7 @@ def index(request):
             if len(post.text) > 140 :
                 post.text = f"{post.text[:140]}..." 
             post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword="posted")
+        
         context = {'posts' : posts}
 
     
@@ -31,6 +32,7 @@ def index(request):
                     post.text = f"{post.text[:140]}..." 
                 post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword="posted")
                 user_timeline_posts.append(post)
+        
         context = {'posts' : user_timeline_posts}
 
     return render(request, 'blogs/index.html', context)
