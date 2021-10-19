@@ -5,6 +5,13 @@
 
     <h1 class="mb-3 text-center"> 
     {{ requested_user.username}}
+    {% if requested_user.userinfo.picture.name == 'False' %}
+      <img style="border-radius: 50%;" src="{{ '/media/images/default_pic.png' }}" alt="{{ requested_user.user.username }}_pic" width="60" height="60">
+    
+    {% else %}
+      <img style="border-radius: 50%;" src="{{ requested_user.userinfo.picture.url }}" alt="{{ requested_user.username }}_pic" width="60" height="60">
+      
+    {% endif %}
     </h1>
     <h3 class="text-successsmall text-center"><small>{{ join_message }}</small><h3>
     <br></br> 

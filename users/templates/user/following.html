@@ -3,7 +3,7 @@
 
 {% block page_header %}
   
-  {% if user.userinfo.following %}
+  {% if followings %}
     <h1 class="text-dark">
     following
     </h1>
@@ -18,16 +18,27 @@
 
 {% block content %}
 
-  {% if user.userinfo.following %}
+  {% if followings %}
     <div>
       <h2 class="mb-5 text-dark">people whome you follow :</h2>
     </div>
   {% endif %}
 
-  {% for following in user.userinfo.following %}
+  {% for following in followings %}
   <div class="list-group list-group-flush">
     <a href="{% url 'users:user_info' following %}" class="list-group-item list-group-item-secondary list-group-item-action border-bottom border-dark">
-      <h3 class="text-dark" style="font-family: Georgia, 'Times New Roman', Times, serif;">{{following}}</h3>
+      <h3 class="text-dark" style="font-family: Georgia, 'Times New Roman', Times, serif;">
+        
+        {% if following.userinfo.picture.name == 'False' %}
+        <img style="border-radius: 50%;" src="{{ '/media/images/default_pic.png' }}" alt="{{ following.username }}_pic" width="30" height="30">
+            
+        {% else %}
+        <img style="border-radius: 50%;" src="{{ following.userinfo.picture.url }}" alt="{{ following.username }}_pic" width="30" height="30">
+              
+        {% endif %}
+        
+        {{following}}
+      </h3>
     </a>
   </div>
   {% empty %}
