@@ -8,6 +8,7 @@ class UserInfo(models.Model):
     following_number = models.PositiveIntegerField(default=0)
     followers = models.JSONField(default=list) 
     following = models.JSONField(default=list)
+    picture = models.ImageField(upload_to = 'images/', default=False)
 
     def __str__(self):
         return f"{self.user} info"
