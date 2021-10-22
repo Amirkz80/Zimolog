@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from users.models import UserInfo
 from blogs.models import BlogPost
+from .forms import UserInfoForm
 
 
 def calculate_time(object_time, now_time, keyword=''):
@@ -97,19 +98,40 @@ def register(request):
         form = UserCreationForm()
     else:
         # Processes user data and login
-            form = UserCreationForm(data=request.POST)
+        form = UserCreationForm(data=request.POST)
 
-            if form.is_valid():
-                new_user = form.save()
-                # creating a userinfo model for user
-                UserInfo(user=new_user).save()
-                # now we log in and then redirect to the index page
-                login(request, new_user)
-                return redirect('blogs:index')
+        if form.is_valid():
+            new_user = form.save()
+            # creating a userinfo model for user
+            UserInfo(user=new_user).save()
+            # now we log in and then go to the get_bio page
+            login(request, new_user)
+            context = {'form' : UserInfoForm() }
+            return render(request, 'registration/bio.html', context)
+    
+    context = {'form' : form}
+    return render(request, 'registration/register.html', context)
+
+ 
+@login_required
+def get_bio(request):
+    """Takes profile pic from user in register page, optional"""
+    
+    if request.method != 'POST':
+        form = UserInfoForm(instance=request.user.userinfo)
+    else:
+        form = UserInfoForm(request.POST, request.FILES, instance=request.user.userinfo)
+    
+        if form.is_valid():
+            new_bio = form.save(commit=False)
+            new_bio.user = request.user
+            new_bio = form.save()
+            return redirect('users:dashboard')
+
 
     # Shows a blank or invalid form
     context = {'form': form}
-    return render(request, 'registration/register.html', context)
+    return render(request, 'registration/bio.html', context)
 
 
 def logged_out(request):
