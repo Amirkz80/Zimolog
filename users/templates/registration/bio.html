@@ -1,0 +1,30 @@
+{% extends "blogs/base.html" %}
+
+{% load bootstrap5 %}
+
+
+{% block page_header %}
+  <style>
+      h1,form{
+      color: green;
+      font-family: Gerogia;
+    }
+  </style>
+    
+  <h1>Add bio<h1>
+{% endblock page_header %}
+
+
+{% block content %}
+  <form class="form" method="post" action="{% url 'users:get_bio' %}" enctype="multipart/form-data" >
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons %}
+      <button class="btn btn-info" name="submit">Submit</button>
+    {% endbuttons %}
+
+  </form>
+
+  <a class="btn btn-secondary" href="{% url 'users:dashboard' %}" >Skip</a>
+
+  {% endblock content %}
