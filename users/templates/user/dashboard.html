@@ -14,6 +14,8 @@
     {% endif %}
     </h1>
     <h3 class="text-successsmall text-center"><small>{{ join_message }}</small><h3>
+    <br></br>
+    bio : {{ user.userinfo.bio_text }}
     <br></br> 
     <a class="btn btn-primary" href="{% url 'users:followers' user.username %}">Followers {{user.userinfo.followers_number}}</a>
     <a class="btn btn-primary" href="{% url 'users:following' user.username %}">Following {{user.userinfo.following_number}}</a>
