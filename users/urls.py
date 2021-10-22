@@ -9,6 +9,8 @@ urlpatterns =[
     path('', include('django.contrib.auth.urls')),
     # Registering new user.
     path('register/', views.register, name='register'),
+    # Add bio page
+    path('bio/', views.get_bio, name='get_bio'),
     # A page to see logging out result
     path('logout/', views.logged_out, name='logged_out'),
      # page that shows user's profile and posts
