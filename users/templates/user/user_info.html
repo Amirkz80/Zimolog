@@ -17,6 +17,7 @@
     <br></br> 
     <a class="btn btn-primary" href="{% url 'users:followers' requested_user.username %}">Followers {{requested_user.userinfo.followers_number}}</a>
     <a class="btn btn-primary" href="{% url 'users:following' requested_user.username %}">Following {{requested_user.userinfo.following_number}}</a>
+    
   
     {% if request.user.username in requested_user.userinfo.followers %}
     <a class="btn btn-dark" href="{% url 'users:follow_unfollow' requested_user.username %}">Unfollow</a>
