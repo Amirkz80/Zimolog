@@ -19,6 +19,7 @@
     <br></br> 
     <a class="btn btn-primary" href="{% url 'users:followers' user.username %}">Followers {{user.userinfo.followers_number}}</a>
     <a class="btn btn-primary" href="{% url 'users:following' user.username %}">Following {{user.userinfo.following_number}}</a>
+    <a class="btn btn-danger" href="{% url 'users:get_bio' %}">Edit Profile</a>
 
 {% endblock page_header %}
 
