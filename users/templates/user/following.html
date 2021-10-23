@@ -18,10 +18,18 @@
 
 {% block content %}
 
+  <!--Check to see wich sentece should be desplayed, with (you) or (username)-->
   {% if followings %}
+    {% if user.username == request.user.username %}
+      <div>
+        <h2 class="mb-5 text-dark">people whom you follow :</h2>
+      </div>
+    {% else %}
     <div>
-      <h2 class="mb-5 text-dark">people whome you follow :</h2>
+      <h2 class="mb-5 text-dark">people whom {{user.username}} follows :</h2>
     </div>
+    {% endif %}
+
   {% endif %}
 
   {% for following in followings %}

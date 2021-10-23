@@ -19,9 +19,18 @@
 {% block content %}
 
   {% if followers %}
+  
+    <!--Check to see wich sentece should be desplayed, with (you) or (username)-->
+    {% if user.username == request.user.username %}
+      <div>
+        <h2 class="mb-5 text-dark">people who follow you :</h2>
+      </div>
+    {% else %}
     <div>
-      <h2 class="mb-5 text-dark">people who follow you :</h2>
+      <h2 class="mb-5 text-dark">people who follow {{user.username}} :</h2>
     </div>
+    {% endif %}
+
   {% endif %}
 
   {% for follower in followers %}
