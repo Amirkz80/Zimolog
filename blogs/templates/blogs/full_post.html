@@ -87,9 +87,20 @@
 
       {% for comment in comments %}
         <div class="mb-1"></div>
-        <div class="text-white">
-        {{comment.owner}} said at : <small class="text-dark">{{ comment.date_added|date:'M d, Y H:i' }}</small>
-        </div>
+        
+          <a class="text-white" style="text-decoration: none;" href="{% url 'users:user_info' comment.owner.username %}">
+              
+            {% if comment.owner.userinfo.picture.name == 'False' %}
+            <img style="border-radius: 50%;" src="{{ '/media/default_pics/default_pic.png' }}" alt="{{ comment.owner.username }}_pic" width="30" height="30">
+            {% else %}
+            <img style="border-radius: 50%;" src="{{ comment.owner.userinfo.picture.url }}" alt="{{ comment.owner.username }}_pic" width="30" height="30">
+            {% endif %}
+          
+            {{comment.owner}}
+          </a>
+
+        <span class="text-white">said at : <small class="text-dark">{{ comment.date_added|date:'M d, Y H:i' }}</small></span>
+        
         <div class="mb-4"></div>
         <h6 class="text-light">{{ comment.text }}</h6>
         <div class="border-bottom mb-3  "></div>
