@@ -5,13 +5,15 @@
   
   <!--Stylization part-->
   <style>
-    #editbutton, #posts, #resultsfor, #noresults, #nopost{
+    
+    #users, #editbutton, #posts, #resultsfor, #noresults, #nopost{
     font-family: "Times New Roman";
     }
 
     #btntext{
       color: mintcream;
     }
+
   </style>
 
   <!--Check if any result's been found or not-->
@@ -41,7 +43,7 @@
     <!--The user results part in the page-->
     {% if users %}
       <div id="users">
-        <h2 class="mb-5 text-info">users :</h2>
+        <h2 class="mb-5 text-info" id="users">users :</h2>
       </div>
     {% endif %}
 
@@ -86,7 +88,12 @@
       <div class="card mb-4 border-dark border-bottom">
         
         <div class="card-body bg-secondary">
-          <h4><a class="text-light" href="{% url 'blogs:full_post' post.id %}">- {{ post.title }}</a></h4>
+          <!--check to see if post has title or not-->
+          {% if post.title %}
+            <h4><a class="text-light" href="{% url 'blogs:full_post' post.id %}">- {{ post.title }}</a></h4>
+          {% else %}
+            <h4><a class="btn btn-outline-info text-light" href="{% url 'blogs:full_post' post.id %}">full post &rarr;</a></h4>
+          {% endif %}
           <br></br>
           <h6 class="text-light mb-5">{{ post.text|linebreaks }}</h6>
         </div>
@@ -113,8 +120,13 @@
       </div>  
 
       </div>
-      <div class="mb-2 border-info border-bottom"></div>
-      <div class="mb-4"></div> 
+    
+      {% if post.id == first_post_id %}
+
+      {% else %}
+        <div class="mb-2 border-info border-bottom"></div>
+        <div class="mb-4"></div>
+      {% endif %}
 
     {% empty %}
     <h2 class="text-info" id="nopost">
@@ -124,3 +136,4 @@
   {% endif %}  
 
 {% endblock content %}
+
