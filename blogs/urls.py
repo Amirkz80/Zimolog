@@ -5,6 +5,8 @@ app_name = 'blogs'
 urlpatterns= [
     # Home page
     path('', views.index, name='index'),
+    # About page
+    path('about/', views.about ,name='about' ),
     # Page that adds new post
     path('add_post/', views.add_post, name='add_post' ),
     # page that edits posts
