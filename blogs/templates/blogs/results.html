@@ -49,12 +49,13 @@
 
     {% for user in users %}
 
+      <!--Users results list-->
       <div class="list-group list-group-flush">
             <a href="{% url 'users:user_info' user.username %}" class="list-group-item list-group-item-secondary list-group-item-action border-bottom border-dark">
               <h4 class="text-dark">- 
 
                 {% if user.userinfo.picture.name == 'False' %}
-                <img style="border-radius: 50%;" src="{{ '/media/images/default_pic.png' }}" alt="{{ user.username }}_pic" width="30" height="30">
+                <img style="border-radius: 50%;" src="{{ '/media/default_pics/default_pic.png' }}" alt="{{ user.username }}_pic" width="30" height="30">
               
                 {% else %}
                 <img style="border-radius: 50%;" src="{{ user.userinfo.picture.url }}" alt="{{ user.username }}_pic" width="30" height="30">
@@ -104,7 +105,7 @@
             <a class="text-white" style="text-decoration: none;" href="{% url 'users:user_info' post.owner.username %}">
 
               {% if post.owner.userinfo.picture.name == 'False' %}
-              <img style="border-radius: 50%;" src="{{ '/media/images/default_pic.png' }}" alt="{{ post.owner.username }}_pic" width="30" height="30">
+              <img style="border-radius: 50%;" src="{{ '/media/default_pics/default_pic.png' }}" alt="{{ post.owner.username }}_pic" width="30" height="30">
             
               {% else %}
               <img style="border-radius: 50%;" src="{{ post.owner.userinfo.picture.url }}" alt="{{ post.owner.username }}_pic" width="30" height="30">
