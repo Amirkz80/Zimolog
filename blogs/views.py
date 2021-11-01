@@ -1,5 +1,6 @@
 import time
 from datetime import datetime
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -7,19 +8,34 @@ from django.http import Http404
 from users.models import UserInfo
 from .models import BlogPost, Comments
 from .forms import BlogPostForm, CommentsForm
-from users.views import calculate_time
+from users.views import calculate_time, delete_username_and_save
+        
+
+def about(request):
+    """Shows about page"""
+    return render(request, 'blogs/about.html')
 
 
 def index(request):
     """Shows the posts in the main page"""
+    comments_number = {}
+    first_post_id = ''
+    # a dictioanry to save the number of comments
     if request.user.is_authenticated == False :
         posts = BlogPost.objects.order_by('-date_added')
         for post in posts:
+            # deleting person from liked people and updating hearts if he's been deleted by admin or h/h self
+            if delete_username_and_save(post.people_who_liked) :
+                post.heart = len(post.people_who_liked)
+                post.save()
+            
             if len(post.text) > 140 :
                 post.text = f"{post.text[:140]}..." 
             post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword="posted")
-        
-        context = {'posts' : posts}
+            comments_number[post.id] = len(post.comments_set.all())
+            first_post_id = post.id
+
+        context = {'posts' : posts, 'comments_number' : comments_number, 'first_post_id' : first_post_id }
 
     
     else:
@@ -32,8 +48,10 @@ def index(request):
                     post.text = f"{post.text[:140]}..." 
                 post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword="posted")
                 user_timeline_posts.append(post)
-        
-        context = {'posts' : user_timeline_posts}
+                comments_number[post.id] = len(post.comments_set.all())
+                first_post_id = post.id
+
+        context = {'posts' : user_timeline_posts, 'comments_number' : comments_number, 'first_post_id' : first_post_id}
 
     return render(request, 'blogs/index.html', context)
 
@@ -92,9 +110,19 @@ def search(request):
 
     # search key in the users and posts in database
     posts = BlogPost.objects.order_by('-date_added')
+    first_post_id = ''
     for post in posts:
         if (key.lower() in post.text.lower()) or (key.lower() in post.title.lower()):
+            # deleting person from liked people and updating hearts if he's been deleted by admin or h/h self
+            if delete_username_and_save(post.people_who_liked) :
+                post.heart = len(post.people_who_liked)
+                post.save()
+
             post_results.append(post)
+            # Calculating postst's time 
+            post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword=('posted'))
+            first_post_id = post.id
+        
     users = User.objects.all()
     for user in users:
         if (key.lower() in user.username.lower()):
@@ -104,11 +132,8 @@ def search(request):
     if post_results == [] and user_results == []:
         flag = False
 
-    # Calculating postst's time 
-    for post in posts :  
-        post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword=('posted'))
 
-    context = {'posts' : post_results, 'users' : user_results, 'key' : key, 'flag' : flag}
+    context = {'posts' : post_results, 'users' : user_results, 'key' : key, 'flag' : flag, 'first_post_id' : first_post_id}
     return render(request, 'blogs/results.html', context)
 
 
@@ -116,18 +141,28 @@ def search(request):
 def delete(request, post_id):
     """Deletes the post"""
     BlogPost.objects.get(id=post_id).delete()
+    
     time.sleep(0.2)
+
     return redirect('users:dashboard')
 
 
 def full_post(request, post_id):
     """Renders the post in its full shape and show its comments"""
+
     post = BlogPost.objects.get(id=post_id)
     comments = Comments.objects.filter(post=post).order_by("-date_added")
 
-    post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword="posted")
+    # deleting person from liked people and updating hearts if he's been deleted by admin or h/h self
+    if delete_username_and_save(post.people_who_liked) :
+        post.heart = len(post.people_who_liked)
+        post.save()
 
-    context = {'post' : post, 'comments' : comments }
+    post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword="posted")
+    
+    comments_number = len(post.comments_set.all())
+    
+    context = {'post' : post, 'comments' : comments, 'comments_number' : comments_number }
     return render(request, 'blogs/full_post.html', context)
 
 
@@ -158,36 +193,49 @@ def like(request, post_id):
     """Increase post's hearts by one,if user's voted already decrease by one"""
     post = BlogPost.objects.get(id=post_id)
     user_name = str(request.user.username)
+    next = request.POST.get('next', '/')
 
     #If user has liked before, decreases hearts by one
     if user_name in post.people_who_liked:
         post.people_who_liked.remove(user_name)
-        post.heart = post.heart - 1
+        post.heart = len(post.people_who_liked)
         post.save()
         flag = 0 
         context = {'flag' : flag}
-        return render(request, 'blogs/like.html', context)
+        return HttpResponseRedirect(next)
 
     #If user hasn't liked before,increases hearts by one
     else:
         if bool(post.people_who_liked) is False:
             post.people_who_liked = []
         post.people_who_liked.append(user_name)
-        post.heart = post.heart + 1
+        post.heart = len(post.people_who_liked)
         post.save()
         flag = 1
         context = {'flag' : flag}
-        return render(request, 'blogs/like.html', context)
+        return HttpResponseRedirect(next)
 
 @login_required
 def discover(request, sort_type=''):
     """Sorts posts by their time or their hearts"""
+    comments_number = {}
+    first_post_id = ''
+    
+
     if sort_type == 'time' :    
         posts = BlogPost.objects.order_by("-date_added")
         for post in posts:
+            # deleting person from liked people and updating hearts if he's been deleted by admin or h/h self
+            if delete_username_and_save(post.people_who_liked) :
+                post.heart = len(post.people_who_liked)
+                post.save()
+
             if len(post.text) > 140 :
                 post.text = f"{post.text[:140]}..." 
             post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword="posted")
+            comments_number[post.id] = len(post.comments_set.all())
+            first_post_id = post.id
+
         # a flag for html page
         flag = 'time'
 
@@ -195,10 +243,17 @@ def discover(request, sort_type=''):
     if sort_type == 'heart' or sort_type == '':
         posts = BlogPost.objects.order_by("-heart")
         for post in posts:
+            if delete_username_and_save(post.people_who_liked) :
+                post.heart = len(post.people_who_liked)
+                post.save()
+
             if len(post.text) > 140 :
                 post.text = f"{post.text[:140]}..." 
             post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword="posted")
+            comments_number[post.id] = len(post.comments_set.all())
+            first_post_id = post.id
+
         flag = 'heart'
 
-    context = {'posts' : posts, 'flag' : flag}
+    context = {'posts' : posts, 'flag' : flag, 'comments_number' : comments_number, 'first_post_id' : first_post_id}
     return render(request, 'blogs/discover.html', context)    
