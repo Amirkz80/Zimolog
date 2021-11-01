@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 
 class UserInfo(models.Model):
+    """"A class to contain info abut the user"""
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, default='')
     followers_number = models.PositiveIntegerField(default=0)
     following_number = models.PositiveIntegerField(default=0)
