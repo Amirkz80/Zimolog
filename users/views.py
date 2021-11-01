@@ -10,6 +10,18 @@ from blogs.models import BlogPost
 from .forms import UserInfoForm
 
 
+def delete_username_and_save(object_list):
+    """Check and upgrade if a user is deleted from database"""
+    change = False
+    for user in object_list :
+        try :
+            User.objects.get(username = user)
+        except User.DoesNotExist :    
+            object_list.remove(user)
+            change = True
+    
+    return(change) 
+
 def calculate_time(object_time, now_time, keyword=''):
     """Calculates how much time has been passed from object_time till now"""
     """keyword can be (posted) word or (joined) word depending on usage for posts or users"""
@@ -147,10 +159,27 @@ def dashboard(request):
     user_posts = BlogPost.objects.filter(owner=request.user).order_by("-date_added")
     join_message = calculate_time(date_joined, now, keyword="Joined")
     
-    for post in user_posts:
-        post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword="posted") 
+    # deleting person from followers and updating followers num if he's been deleted by admin or h/h self
+    if delete_username_and_save(request.user.userinfo.followers) :
+        request.user.userinfo.followers_number = len(request.user.userinfo.followers)
+        request.user.userinfo.save()
 
-    context = {'user_posts' : user_posts, 'join_message' : join_message}
+    # deleting person from following and updating following num if he's been deleted by admin or h/h self
+    if delete_username_and_save(request.user.userinfo.following) :
+        request.user.userinfo.following_number = len(request.user.userinfo.following)
+        request.user.userinfo.save()
+
+    first_post_id = ''
+    for post in user_posts:
+        # deleting person from liked people and updating hearts if he's been deleted by admin or h/h self
+        if delete_username_and_save(post.people_who_liked) :
+            post.heart = len(post.people_who_liked)
+            post.save()
+
+        post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword="posted") 
+        first_post_id = post.id
+
+    context = {'user_posts' : user_posts, 'join_message' : join_message, 'first_post_id' : first_post_id}
     return render(request, 'user/dashboard.html', context)
 
 
@@ -197,11 +226,28 @@ def user_info(request, user_name):
     posts = user.blogpost_set.order_by("-date_added")
     join_message = calculate_time(user.date_joined, datetime.utcnow(), keyword="joined")
 
-    # Calculating the time that user's posts has been posted by user
-    for post in posts:
-        post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword='posted')
+    # deleting person from followers and updating followers num if he's been deleted by admin or h/h self
+    if delete_username_and_save(user.userinfo.followers) :
+        user.userinfo.followers_number = len(user.userinfo.followers)
+        user.userinfo.save()
 
-    context = {'requested_user' : user, 'posts' : posts, 'join_message' : join_message}
+    # deleting person from following and updating following num if he's been deleted by admin or h/h self
+    if delete_username_and_save(user.userinfo.following) :
+        user.userinfo.following_number = len(user.userinfo.following)
+        user.userinfo.save()
+
+    # Calculating the time that user's posts has been posted by user
+    first_post_id = ''
+    for post in posts:
+        # deleting person from liked people and updating hearts if he's been deleted by admin or h/h self
+        if delete_username_and_save(post.people_who_liked) :
+            post.heart = len(post.people_who_liked)
+            post.save()
+        
+        post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword='posted')
+        first_post_id = post.id
+
+    context = {'requested_user' : user, 'posts' : posts, 'join_message' : join_message, 'first_post_id' : first_post_id}
     return render(request, 'user/user_info.html', context)
 
 
@@ -216,11 +262,11 @@ def follow_unfollow(request, user_name):
     #If user is already in selected user's followers, does unfollow
     if current_usernname in selected_user_info.followers:
         selected_user_info.followers.remove(current_usernname)
-        selected_user_info.followers_number = selected_user_info.followers_number - 1
+        selected_user_info.followers_number = len(selected_user_info.followers)
         selected_user_info.save(update_fields=['followers', 'followers_number'])
         
         currnet_user_info.following.remove(selected_username)
-        currnet_user_info.following_number = currnet_user_info.following_number - 1
+        currnet_user_info.following_number = len(currnet_user_info.following)
         currnet_user_info.save(update_fields=['following', 'following_number'])
 
         flag = 0 
@@ -236,11 +282,11 @@ def follow_unfollow(request, user_name):
             currnet_user_info.followers = []    
         
         selected_user_info.followers.append(current_usernname)
-        selected_user_info.followers_number = selected_user_info.followers_number + 1
+        selected_user_info.followers_number = len(selected_user_info.followers)
         selected_user_info.save(update_fields=['followers', 'followers_number'])
         
         currnet_user_info.following.append(selected_username)
-        currnet_user_info.following_number = currnet_user_info.following_number + 1
+        currnet_user_info.following_number = len(currnet_user_info.following)
         currnet_user_info.save(update_fields=['following', 'following_number'])
 
         flag = 1
