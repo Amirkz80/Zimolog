@@ -38,6 +38,14 @@
       background-color: #FFFFEC;
     }
 
+    footer{
+      background-color: #6c757d;
+      padding: 10px;
+      bottom: 0;
+      position: fixed;
+      width: 100%;
+    }
+
   </style>
 </head>
 
@@ -78,7 +86,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link active mb-2" aria-current=page
-                href="">About</a>
+                href="{% url 'blogs:about' %}">About</a>
             </li> 
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle active mb-2" 
@@ -100,13 +108,7 @@
               </ul>
             </li>
           </ul>
-          <br></br>
-          <form class="d-flex" action="{% url 'blogs:search' %}" method="get">
-            <input class="form-control me-2" type="search"
-            placeholder="Search posts, titles..." aria-label="Search" name="search">
-            <button class="btn btn-outline-success bg-warning" 
-            type="submit"><span class="text-white">Search</span></button>
-          </form>
+
           {% else %}
             <li class="nav-item">
               <a class="nav-link active mb-2" aria-current=page
@@ -118,7 +120,7 @@
             </li>
             <li class="nav-item mb-2">
                 <a class="nav-link active" aria-current=page
-                href="#">About</a>
+                href="{% url 'blogs:about' %}">About</a>
             </li>
           {% endif %}
         </div>
@@ -138,4 +140,15 @@
     </div>
   </main>
 
-</body>  
+  
+</body>
+
+<br></br>
+  <footer class="text-center">
+    <form class="d-flex" action="{% url 'blogs:search' %}" method="get">
+      <input class="form-control me-2" type="search"
+      placeholder="Search Users, Posts, Titles..." aria-label="Search" name="search" required>
+      <button class="btn btn-outline-success bg-warning" 
+      type="submit"><span class="text-white">Search</span></button>
+    </form>
+  </footer>
