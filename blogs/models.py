@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 class BlogPost(models.Model):
     """Contains a title and texts about each title"""
-    title = models.CharField(max_length=200)
+    title = models.CharField(default='', max_length=100)
     text = models.TextField()
     date_added = models.DateTimeField(auto_now_add=True)
     heart = models.PositiveIntegerField(default=0)
