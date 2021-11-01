@@ -13,18 +13,27 @@
       
     {% endif %}
     </h1>
-    <h3 class="text-successsmall text-center"><small>{{ join_message }}</small><h3>
+    <h3 style="font-family: Georgia, 'Times New Roman', Times, serif;" class="text-successsmall text-success text-center"><small>{{ join_message }}</small><h3>
     <br></br> 
-    <a class="btn btn-primary" href="{% url 'users:followers' requested_user.username %}">Followers {{requested_user.userinfo.followers_number}}</a>
-    <a class="btn btn-primary" href="{% url 'users:following' requested_user.username %}">Following {{requested_user.userinfo.following_number}}</a>
-    
-  
-    {% if request.user.username in requested_user.userinfo.followers %}
-    <a class="btn btn-dark" href="{% url 'users:follow_unfollow' requested_user.username %}">Unfollow</a>
-    {% else %}
-    <a class="btn btn-dark" href="{% url 'users:follow_unfollow' requested_user.username %}">Follow</a>
-    {% endif %}
 
+    <div class="text-center">
+      <h3>
+        {{ requested_user.userinfo.bio_text }}
+      </h3>
+    </div>
+
+    <br></br>
+    <div class="d-flex justify-content-center">
+      <a class="btn btn-info" href="{% url 'users:followers' requested_user.username %}">Followers {{requested_user.userinfo.followers_number}}</a>&nbsp;
+      <a class="btn btn-info" href="{% url 'users:following' requested_user.username %}">Following {{requested_user.userinfo.following_number}}</a>&nbsp;
+      
+    
+      {% if request.user.username in requested_user.userinfo.followers %}
+        <a class="btn btn-success" href="{% url 'users:follow_unfollow' requested_user.username %}">Unfollow</a>
+      {% else %}
+        <a class="btn btn-success" href="{% url 'users:follow_unfollow' requested_user.username %}">Follow</a>
+      {% endif %}
+    </div>
     {% endblock page_header %}
 
 
@@ -33,7 +42,7 @@
 
   {% if posts %}
     <div>
-      <h2 class="mb-5">{{ requested_user.username }}'s posts</h2>
+      <h2 class="mb-5 text-success" style="font-family: Georgia, 'Times New Roman', Times, serif;">{{ requested_user.username }}'s posts</h2>
     </div>
   {% endif %}
 
@@ -42,7 +51,12 @@
     <div class="card mb-4 border-dark border-bottom">
       
       <div class="card-body bg-secondary">
-        <h4 class="text-light- {{ post.title }}">{{ post.title }}</h4>
+        <!--check to see if post has title or not-->
+        {% if post.title %}
+          <h4><a class="text-light" href="{% url 'blogs:full_post' post.id %}">- {{ post.title }}</a></h4>
+        {% else %}
+          <h4><a class="btn btn-outline-info text-light" href="{% url 'blogs:full_post' post.id %}">full post &rarr;</a></h4>
+        {% endif %}
         <br></br>
         <h6 class="text-light mb-5{{ post.textlinebreaks }}">{{ post.text }}</h6>
       
@@ -50,14 +64,17 @@
         <div class="text-white text-end">
             {{ post.owner }} {{ post.date_added }} 
         </div>
-      </div>
-      
+      </div> 
       </div>
     </div>
 
-    <div class="mb-2 border-info border-bottom"></div>
-    <div class="mb-4"></div> 
-  
+    {% if post.id == first_post_id %}
+
+      {% else %}
+        <div class="mb-2 border-info border-bottom"></div>
+        <div class="mb-4"></div>
+        {% endif %}
+
   {% empty %}
   <h2 class="text-info">
   {{ requested_user.username}} hasn't added any post .
