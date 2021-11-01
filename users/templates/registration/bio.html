@@ -9,6 +9,12 @@
       color: green;
       font-family: Gerogia;
     }
+    input {
+
+      color : green;
+
+    }
+
   </style>
     
   <h1>Add bio<h1>
@@ -19,12 +25,12 @@
   <form class="form" method="post" action="{% url 'users:get_bio' %}" enctype="multipart/form-data" >
     {% csrf_token %}
     {% bootstrap_form form %}
+    <br></br>
     {% buttons %}
-      <button class="btn btn-info" name="submit">Submit</button>
-    {% endbuttons %}
+      <button class="btn btn-success" name="submit">Submit</button>
+      <a class="btn btn-secondary" href="{% url 'users:dashboard' %}" >Skip</a>
+      {% endbuttons %}
 
   </form>
-
-  <a class="btn btn-secondary" href="{% url 'users:dashboard' %}" >Skip</a>
 
   {% endblock content %}
