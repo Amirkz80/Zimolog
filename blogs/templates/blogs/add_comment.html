@@ -6,6 +6,7 @@
 {% block page_header %}
   
   <h1 class="text-success">Add a new comment.<h1>
+
 {% endblock page_header %}
 
 
@@ -16,9 +17,9 @@
     {% csrf_token %}
     {% bootstrap_form form %}
     {% buttons %}
-      <button class="btn btn-success" name="submit">Add post</button> 
+      <button class="btn btn-success" name="submit">Add comment</button> 
     {% endbuttons %}
   </form> 
 
-  
+
 {% endblock content %}
