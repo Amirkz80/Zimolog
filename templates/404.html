@@ -1,0 +1,26 @@
+{% extends "blogs/base.html" %}
+
+{% load bootstrap5 %}
+
+
+{% block page_header %}
+  <style>
+    h1,form{
+    color: green;
+    font-family: Gerogia;
+  }
+
+  </style>
+
+  <h1>404 ERROR<h2>
+{% endblock page_header %}
+
+
+{% block content %}
+  <h3>The Item you requested is not available<h3>
+    <div class="mb-5"></div>
+  <a class="btn btn-info" href="{% url 'blogs:index' %}">
+  Home
+  </a>
+
+{% endblock content %}

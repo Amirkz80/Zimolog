@@ -1,0 +1,26 @@
+{% extends "blogs/base.html" %}
+
+{% load bootstrap5 %}
+
+
+{% block page_header %}
+  <style>
+    h1,form{
+    color: green;
+    font-family: Gerogia;
+  }
+
+  </style>
+
+  <h1>500 ERROR<h2>
+{% endblock page_header %}
+
+
+{% block content %}
+  <h3>There's been an internal Error, check the url you entered on the search bar<h3>
+    <div class="mb-5"></div>
+  <a class="btn btn-info" href="{% url 'blogs:index' %}">
+  Home
+  </a>
+
+{% endblock content %}
