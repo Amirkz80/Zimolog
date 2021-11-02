@@ -2,6 +2,7 @@
 
 from django.urls import path, include
 from . import views
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 app_name ='users'
 urlpatterns =[
@@ -24,3 +25,5 @@ urlpatterns =[
     # page that informs users if they followed or unfollowed somone else
     path('<str:user_name>/follow_status', views.follow_unfollow, name='follow_unfollow' )
 ] 
+
+urlpatterns += staticfiles_urlpatterns()
