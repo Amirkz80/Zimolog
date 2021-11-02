@@ -17,7 +17,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # creating media root
-MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT =  f'{BASE_DIR}/users/static/users/media'
 MEDIA_URL = '/media/'
 
 # Quick-start development settings - unsuitable for production

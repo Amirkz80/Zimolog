@@ -6,6 +6,7 @@
     <h1 class="mb-3 text-center"> 
     {{ requested_user.username}}
     {% if requested_user.userinfo.picture.name == 'False' %}
+    
       <img style="border-radius: 50%;" src="{{ '/media/default_pics/default_pic.png' }}" alt="{{ requested_user.user.username }}_pic" width="60" height="60">
     
     {% else %}
