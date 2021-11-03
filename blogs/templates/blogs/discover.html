@@ -82,7 +82,9 @@
             <a class="text-white" style="text-decoration: none;" href="{% url 'users:user_info' post.owner.username %}">
 
               {% if post.owner.userinfo.picture.name == 'False' %}
-              <img style="border-radius: 50%;" src="{{ '/media/default_pics/default_pic.png' }}" alt="{{ post.owner.username }}_pic" width="30" height="30">
+
+              {% load static %}
+              <img style="border-radius: 50%;" src="{% static '/users/default_images/default_pic.png' %}" alt="{{ post.owner.username }}_pic" width="30" height="30">
             
               {% else %}
               <img style="border-radius: 50%;" src="{{ post.owner.userinfo.picture.url }}" alt="{{ post.owner.username }}_pic" width="30" height="30">

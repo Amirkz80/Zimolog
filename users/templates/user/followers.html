@@ -39,7 +39,9 @@
       <h3 class="text-dark" style="font-family: Georgia, 'Times New Roman', Times, serif;">- 
         
         {% if follower.userinfo.picture.name == 'False' %}
-          <img style="border-radius: 50%;" src="{{ '/media/default_pics/default_pic.png' }}" alt="{{ follower.username }}_pic" width="30" height="30">
+
+          {% load static %}
+          <img style="border-radius: 50%;" src="{% static '/users/default_images/default_pic.png' %}" alt="{{ follower.username }}_pic" width="30" height="30">
               
           {% else %}
           <img style="border-radius: 50%;" src="{{ follower.userinfo.picture.url }}" alt="{{ follower.username }}_pic" width="30" height="30">
