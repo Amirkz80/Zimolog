@@ -157,19 +157,22 @@
     <!-- Full-width images with number and caption text -->
     <div class="mySlides fade">
       <div class="numbertext">1 / 3</div>
-      <img src="{{ '/media/default_pics/first_slide.jpg' }}" height="360px" style="width: 100%;">
+      {% load static %}
+      <img src="{% static '/users/default_images/first_slide.jpg' %}" height="360px" style="width: 100%;">
       <div class="text-center text-success" style="font-family: Georgia, 'Times New Roman', Times, serif;"><h4>Share your ideas, moments and thoughts.</h4></div>
     </div>
   
     <div class="mySlides fade">
       <div class="numbertext">2 / 3</div>
-      <img src="{{ '/media/default_pics/second_slide.jpg' }}" height="360px" style="width: 100%;">
+      {% load static %}
+      <img src="{% static '/users/default_images/second_slide.jpg' %}" height="360px" style="width: 100%;">
       <div class="text-center text-success" style="font-family: 'Times New Roman', Times, serif;"><h4>Find new friends, react to them and be a part of community.</h4></div>
     </div>
   
     <div class="mySlides fade">
       <div class="numbertext">3 / 3</div>
-      <img src="{{ '/media/default_pics/third_slide.jpg' }}"  height="360px" style="width: 100%;">
+      {% load static %}
+      <img src="{% static '/users/default_images/third_slide.jpg' %}"  height="360px" style="width: 100%;">
       <div class="text-center text-success" style="font-family: 'Times New Roman', Times, serif;"><h4>Search and discover the new people and new views!</h4></div>
     </div>
   
