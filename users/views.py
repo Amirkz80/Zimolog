@@ -1,5 +1,6 @@
 from datetime import datetime
 from time import strftime
+import cloudinary
 from django.shortcuts import render, redirect
 from django.contrib.auth import REDIRECT_FIELD_NAME, login
 from django.contrib.auth.forms import UserCreationForm
