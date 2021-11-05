@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     # tp a.
     'bootstrap5',
+    'cloudinary',
 
     # Default apps.
     'django.contrib.admin',
@@ -148,3 +149,23 @@ if os.environ.get('DEBUG') == 'TRUE':
     DEBUG = True
 elif os.environ.get('DEBUG') == 'FALSE':
     DEBUG = False
+
+
+# cloudinary setting
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+cloudinary.config( 
+  cloud_name = "damkkkcpc", 
+  api_key = "667333888655952", 
+  api_secret = "u4l5otpVZQzPWwa_BlilutqdHJU"
+)
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'damkkkcpc',
+    'API_KEY': '667333888655952',
+    'API_SECRET': 'u4l5otpVZQzPWwa_BlilutqdHJU',
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
