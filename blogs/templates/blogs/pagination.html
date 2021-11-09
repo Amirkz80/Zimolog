@@ -1,0 +1,33 @@
+{% load bootstrap5 %}
+
+<div class="pagintor text-center text-secondary" id="paginator" style="font-size: x-large;">
+  
+  <span class="first page">
+    {% if page.has_previous %}
+      <a href="?page=1">First Page</a>    
+    {% endif %}
+  </span>
+
+  <span class="previous page">
+    {% if page.has_previous %}
+      <a href="?page={{ page.previous_page_number }}">Previous</a>    
+    {% endif %}
+  </span>
+
+  <span class="current">
+      {{ page.number }} of {{ page.paginator.num_pages }}
+  </span>
+
+  <span class="next page">
+    {% if page.has_next %}
+      <a href="?page={{ page.next_page_number }}">Next</a>    
+    {% endif %}
+  </span>
+
+  <span class="last page">
+    {% if page.has_next %}
+      <a href="?page={{ page.paginator.num_pages }}">Last Page</a>    
+    {% endif %}
+  </span>
+
+</div>    
