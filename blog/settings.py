@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-g0zo6zjv=kmx5#+$%hnsy*39xwk$1rwon3h8ujjmsgwvov%byv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://zimolog.herokuapp.com/']
 
 
 # Application definition
