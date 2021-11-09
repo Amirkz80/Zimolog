@@ -25,7 +25,7 @@
 
 
 {% block content %}
-  
+
   <div id="latest_posts">
     {% if user.is_authenticated %}
       {% if posts %}
@@ -136,4 +136,7 @@
 
     {% endfor %}
 
+  {% include 'blogs/pagination.html' with page=posts %}
+
+  <br></br>
 {% endblock content %}
