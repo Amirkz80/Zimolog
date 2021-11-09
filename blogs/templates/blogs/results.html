@@ -98,7 +98,11 @@
             <h4><a class="btn btn-outline-info text-light" href="{% url 'blogs:full_post' post.id %}">full post &rarr;</a></h4>
           {% endif %}
           <br></br>
-          <h6 class="text-light mb-5">{{ post.text|linebreaks }}</h6>
+
+          <!--Post text-->
+          <div dir="auto" id="card text"> 
+            <h6 class="text-light mb-5">{{ post.text|linebreaks }}</h6>
+          </div>
         </div>
       
         <div class="card-footer border-light bg-secondary">

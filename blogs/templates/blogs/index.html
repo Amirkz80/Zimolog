@@ -40,6 +40,7 @@
     {% for post in posts %}
       <div class="card mb-4 border-dark border-bottom">
         <div class="card-body bg-secondary">
+
           <!--check to see if post has title or not-->
           {% if post.title %}
             <h4><a class="text-light" href="{% url 'blogs:full_post' post.id %}">- {{ post.title }}</a></h4>
@@ -47,7 +48,9 @@
             <h4><a class="btn btn-outline-info text-light" href="{% url 'blogs:full_post' post.id %}">full post &rarr;</a></h4>
           {% endif %}
           <br></br>
-          <h6 class="text-light mb-4">{{ post.text|linebreaks }}</h6>
+          <div dir="auto" id="card text">  
+            <h6 class="text-light mb-4">{{ post.text|linebreaks }}</h6>
+          </div>
 
           <!--add comments and like section-->
           <div style="float: right;" class="btn-group bg-secondary mr-3" role="group" aria-label="Basic checkbox toggle button group">

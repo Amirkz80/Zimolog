@@ -3,6 +3,7 @@
 
 {% block page_header %}
 
+    <!--Showing user photo , number of followers and following, follow button-->
     <h1 class="mb-3 text-center"> 
     {{ requested_user.username}}
     {% if requested_user.userinfo.picture.name == 'False' %}
@@ -60,8 +61,12 @@
           <h4><a class="btn btn-outline-info text-light" href="{% url 'blogs:full_post' post.id %}">full post &rarr;</a></h4>
         {% endif %}
         <br></br>
-        <h6 class="text-light mb-5{{ post.textlinebreaks }}">{{ post.text }}</h6>
-      
+
+        <!--Post text-->
+        <div dir="auto" id="card text"> 
+          <h6 class="text-light mb-5{{ post.textlinebreaks }}">{{ post.text }}</h6>
+        </div> 
+        
       <div class="card-footer border-info bg-secondary">
         <div class="text-white text-end">
             {{ post.owner }} {{ post.date_added }} 
