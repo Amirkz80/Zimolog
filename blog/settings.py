@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-g0zo6zjv=kmx5#+$%hnsy*39xwk$1rwon3h8ujjmsgwvov%byv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://zimolog.herokuapp.com/']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -169,3 +169,7 @@ CLOUDINARY_STORAGE = {
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+from django.utils.log import DEFAULT_LOGGING
+
+DEFAULT_LOGGING['handlers']['console']['filters'] = []
