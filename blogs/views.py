@@ -56,7 +56,8 @@ def index(request):
             comments_number[post.id] = len(post.comments_set.all())
             first_post_id = post.id
 
-        # Pagintaing page
+
+        # Pagintaing anonymos user page
         posts_and_page = pagination_func(request, posts, 5)
         posts = posts_and_page['posts']
         page  =  posts_and_page['page']
@@ -77,7 +78,13 @@ def index(request):
                 comments_number[post.id] = len(post.comments_set.all())
                 first_post_id = post.id
 
-        context = {'posts' : user_timeline_posts, 'comments_number' : comments_number, 'first_post_id' : first_post_id}
+
+        # Pagintaing sigend in user page
+        posts_and_page = pagination_func(request, user_timeline_posts, 5)
+        posts = posts_and_page['posts']
+        page  =  posts_and_page['page']
+
+        context = {'posts' : posts, 'page' : page, 'comments_number' : comments_number, 'first_post_id' : first_post_id}
 
     return render(request, 'blogs/index.html', context)
 
