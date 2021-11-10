@@ -7,8 +7,7 @@
     {{user.username}}
     {% if request.user.userinfo.picture.name == 'False' %}
       
-      {% load static %}
-      <img style="border-radius: 50%;" src="{% static 'users/default_images/default_pic.png' %}" alt="{{ request.user.username }}_pic" width="60" height="60">
+      <img style="border-radius: 50%;" src="/static/users/media/default_images/default_pic.png" alt="{{ request.user.username }}_pic" width="60" height="60">
     
     {% else %}
       <img style="border-radius: 50%;" src="{{ request.user.userinfo.picture.url }}" alt="{{ request.user.username }}_pic" width="60" height="60">

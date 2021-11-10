@@ -96,9 +96,8 @@
             <a class="text-white" style="text-decoration: none;" href="{% url 'users:user_info' post.owner.username %}">
             
               {% if post.owner.userinfo.picture.name == 'False' %}
-              
-              {% load static %}
-              <img style="border-radius: 50%;" src="{% static '/users/default_images/default_pic.png' %}" alt="{{ post.owner.username }}_pic" width="30" height="30">
+            
+              <img style="border-radius: 50%;" src="static/users/media/default_images/default_pic.png" alt="{{ post.owner.username }}_pic" width="30" height="30">
             
               {% else %}
               <img style="border-radius: 50%;" src="{{ post.owner.userinfo.picture.url }}" alt="{{ post.owner.username }}_pic" width="30" height="30">
@@ -116,14 +115,15 @@
       {% else %}
         <div class="mb-2 border-info border-bottom"></div>
         <div class="mb-4"></div>
-        {% endif %}
+      {% endif %}
    
     {% empty %}
   
       {% if user.is_authenticated %}
       <div class="d-flex justify-content-center">
-        {% load static %}
-        <img style="border-radius: 50%;" src="{% static '/users/default_images/empty_timeline.jpeg' %}" alt="empty_timline_pic" width="150" height="150">
+        
+
+        <img style="border-radius: 50%;" src="/static/users/media/default_images/empty_timeline.jpeg" alt="empty_timeline_pic" width="150" height="150">
       </div>  
         <h1 class="text-success text-center" id="nopost">Your TimeLine is empty
         </h1>
@@ -135,8 +135,12 @@
       {% endif %}
 
     {% endfor %}
-
-  {% include 'blogs/pagination.html' with page=posts %}
+        
+    <!--Shows pagination part if there is or are posts in the index-->
+    {% if posts %}
+    {% include 'blogs/pagination.html' with page=posts %}
+    
+    {% endif %}
 
   <br></br>
 {% endblock content %}

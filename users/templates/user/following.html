@@ -39,8 +39,7 @@
         
         {% if following.userinfo.picture.name == 'False' %}
 
-          {% load static %}
-          <img style="border-radius: 50%;" src="{% static '/users/default_images/default_pic.png' %}" alt="{{ following.username }}_pic" width="30" height="30">
+          <img style="border-radius: 50%;" src="/static/users/media/default_images/default_pic.png" alt="{{ following.username }}_pic" width="30" height="30">
             
         {% else %}
           <img style="border-radius: 50%;" src="{{ following.userinfo.picture.url }}" alt="{{ following.username }}_pic" width="30" height="30">
