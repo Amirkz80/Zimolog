@@ -1,6 +1,5 @@
 import time
 from datetime import datetime
-from django.core import paginator
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -11,25 +10,8 @@ from .models import BlogPost, Comments
 from .forms import BlogPostForm, CommentsForm
 from users.views import calculate_time, delete_username_and_save
 # Using pagianator featrue to break pages into pieces
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage     
-
-
-def pagination_func(request, list_objects, objects_per_page):
-    """Paginates the the lists and return posts and page"""
-    page = request.GET.get('page')
-    
-    paginator = Paginator(list_objects, objects_per_page)
-    try:
-        posts = paginator.page(page)
-    # Retrun first page if page number is not an integer
-    except PageNotAnInteger:
-        posts= paginator.page(1)
-    # Retrun last pages if page number is out of index
-    except EmptyPage:
-        posts = paginator.page(paginator.num_pages)
-
-    output = {'posts' : posts, 'page' : page}
-    return output
+# Importing pagination_func from users.views    
+from users.views import pagination_func
 
 
 def about(request):
@@ -165,7 +147,7 @@ def search(request):
     if post_results == [] and user_results == []:
         flag = False
 
-
+    
     context = {'posts' : post_results, 'users' : user_results, 'key' : key, 'flag' : flag, 'first_post_id' : first_post_id}
     return render(request, 'blogs/results.html', context)
 
@@ -269,6 +251,11 @@ def discover(request, sort_type=''):
             comments_number[post.id] = len(post.comments_set.all())
             first_post_id = post.id
 
+        # Pagintaing anonymos user page
+        posts_and_page = pagination_func(request, posts, 5)
+        posts = posts_and_page['posts']
+        page  =  posts_and_page['page']
+
         # a flag for html page
         flag = 'time'
 
@@ -285,8 +272,14 @@ def discover(request, sort_type=''):
             post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword="posted")
             comments_number[post.id] = len(post.comments_set.all())
             first_post_id = post.id
-
+        
+        # Pagintaing anonymos user page
+        posts_and_page = pagination_func(request, posts, 5)
+        posts = posts_and_page['posts']
+        page  =  posts_and_page['page']
+        
+        # a flag for html page
         flag = 'heart'
 
-    context = {'posts' : posts, 'flag' : flag, 'comments_number' : comments_number, 'first_post_id' : first_post_id}
+    context = {'posts' : posts,'page' : page, 'flag' : flag, 'comments_number' : comments_number, 'first_post_id' : first_post_id}
     return render(request, 'blogs/discover.html', context)    
