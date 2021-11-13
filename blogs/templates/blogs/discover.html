@@ -109,4 +109,13 @@
         <h1 class="text-success" id="nopost">There hasn't been any posts yet !</h1>
     {% endfor %}
 
+
+    <!--Shows pagination part if there is or are posts in the discover page-->
+    {% if posts %}
+    {% include 'blogs/pagination.html' with page=posts %}
+    
+    {% endif %}
+
+<br></br>
+
 {% endblock content %}

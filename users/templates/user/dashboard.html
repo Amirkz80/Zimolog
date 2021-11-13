@@ -121,5 +121,11 @@
   </h2>   
   {% endfor %}
 
+  <!--Shows pagination part if there is or are posts in the discover page-->
+  {% if user_posts %}
+  {% include 'blogs/pagination.html' with page=user_posts %}
+  
+  {% endif %}
 
+  <br></br>
 {% endblock content %}  
