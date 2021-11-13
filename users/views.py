@@ -9,6 +9,26 @@ from django.contrib.auth.models import User
 from users.models import UserInfo
 from blogs.models import BlogPost
 from .forms import UserInfoForm
+# Using pagianator featrue to break pages into pieces
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage  
+
+
+def pagination_func(request, list_objects, objects_per_page):
+    """Paginates the the lists and return posts and page"""
+    page = request.GET.get('page')
+    
+    paginator = Paginator(list_objects, objects_per_page)
+    try:
+        posts = paginator.page(page)
+    # Retrun first page if page number is not an integer
+    except PageNotAnInteger:
+        posts= paginator.page(1)
+    # Retrun last pages if page number is out of index
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+
+    output = {'posts' : posts, 'page' : page}
+    return output
 
 
 def delete_username_and_save(object_list):
@@ -22,6 +42,7 @@ def delete_username_and_save(object_list):
             change = True
     
     return(change) 
+
 
 def calculate_time(object_time, now_time, keyword=''):
     """Calculates how much time has been passed from object_time till now"""
@@ -180,7 +201,12 @@ def dashboard(request):
         post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword="posted") 
         first_post_id = post.id
 
-    context = {'user_posts' : user_posts, 'join_message' : join_message, 'first_post_id' : first_post_id}
+    # Pagintaing anonymos user page
+    posts_and_page = pagination_func(request, user_posts, 5)
+    user_posts = posts_and_page['posts']
+    page  =  posts_and_page['page']
+
+    context = {'user_posts' : user_posts, 'page' : page, 'join_message' : join_message, 'first_post_id' : first_post_id}
     return render(request, 'user/dashboard.html', context)
 
 
@@ -248,7 +274,13 @@ def user_info(request, user_name):
         post.date_added = calculate_time(post.date_added, datetime.utcnow(), keyword='posted')
         first_post_id = post.id
 
-    context = {'requested_user' : user, 'posts' : posts, 'join_message' : join_message, 'first_post_id' : first_post_id}
+
+    # Pagintaing anonymos user page
+    posts_and_page = pagination_func(request, posts, 5)
+    posts = posts_and_page['posts']
+    page  =  posts_and_page['page']
+
+    context = {'requested_user' : user, 'posts' : posts, 'page' : page, 'join_message' : join_message, 'first_post_id' : first_post_id}
     return render(request, 'user/user_info.html', context)
 
 
