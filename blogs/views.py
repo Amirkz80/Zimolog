@@ -1,13 +1,16 @@
 import time
 from datetime import datetime
+
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
 from django.http import Http404
+
 from users.models import UserInfo
 from .models import BlogPost, Comments
-from .forms import BlogPostForm, CommentsForm
+from .forms import BlogPostForm, CommentsForm, EmailSharingForm
 from users.views import calculate_time, delete_username_and_save
 # Using pagianator featrue to break pages into pieces
 # Importing pagination_func from users.views    
@@ -283,3 +286,38 @@ def discover(request, sort_type=''):
 
     context = {'posts' : posts,'page' : page, 'flag' : flag, 'comments_number' : comments_number, 'first_post_id' : first_post_id}
     return render(request, 'blogs/discover.html', context)    
+
+@login_required
+def share(request, post_id):
+    """A view to submit valid email form and send email then"""
+    
+    post = BlogPost.objects.get(id=post_id)
+    sent = False
+ 
+    if request.method == 'POST':
+        form = EmailSharingForm(request.POST)
+        
+        if form.is_valid():
+            cd = form.cleaned_data
+
+            # Setting subject message
+            if post.title == '':
+                sub = f"{cd['name'].title()} recommends you to read a post in Zimolog!"
+            else:
+                sub = f"{cd['name'].title()} recommends you to read {post.title.title()}"
+            
+            send_mail(
+                subject = sub,
+                message = f"Read '{post.title}' at zimolog.herokuapp.com/post/{post_id}\n"
+                          f"{cd['name']} comment :\n{cd['comment']}",
+
+                from_email = cd['email'],
+                recipient_list = [cd['send_to']],
+                fail_silently=False,
+            )
+            sent = True
+
+    form = EmailSharingForm()
+
+    context = {'form' : form, 'sent' : sent, 'post' : post}
+    return render(request, 'blogs/Share.html', context)
