@@ -67,6 +67,8 @@
                 {% endfor %}   
             </a>
 
+            <!--Share button-->
+            <a class="btn btn-outline-info" href="{% url 'blogs:share' post.id %}">share</a>
            
             <!--heart button-->
             <form class="form" action="{% url 'blogs:like' post.id %}" method="POST">
