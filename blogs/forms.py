@@ -1,5 +1,6 @@
 from typing import AbstractSet
 from django import forms
+from django.forms.widgets import TextInput
 from .models import BlogPost,Comments
 
 class BlogPostForm(forms.ModelForm):
@@ -22,3 +23,12 @@ class CommentsForm(forms.ModelForm):
         fields = ['text']
         labels = {'text' : ''}
         widgets = {'text': forms.Textarea(attrs={'cols' : 80})}
+
+class EmailSharingForm(forms.Form):
+    """A form to share posts via email"""
+    name = forms.CharField(max_length=30)
+    email = forms.EmailField(required=True)
+    send_to = forms.EmailField(required=True)
+    comment = forms.CharField(required=False, widget=forms.Textarea)
+
+        
