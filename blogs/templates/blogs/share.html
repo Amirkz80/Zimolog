@@ -1,0 +1,30 @@
+{% extends "blogs/base.html" %}
+
+{% load bootstrap5 %}
+
+{% block page_header %}
+    <h2>Let's share this post</h2>
+{% endblock page_header %}
+
+{% block content %}
+    
+    {% if sent %}
+      <h3>Email successfully sent!</h3>
+      <p>{{post.title}} was sent to {{form.cleaned_data.send_to}} successfully ;)</p>
+
+    {% else %}
+      <p>Share {{ post.title }} by E-mail</p>
+      
+      <form class="form" method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        
+        {% buttons %}
+          <button class="btn btn-info" type="submit" value="send email" >Send Email</button>
+        {% endbuttons %}
+        
+      </form>
+    
+    {% endif %}
+
+{% endblock content %}
