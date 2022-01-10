@@ -31,6 +31,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Email setting,
+# Using gmail smtp as email provider
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'amirkazemzadeh77@gmail.com'
+EMAIL_HOST_PASSWORD = 'vqrbwylooeajkqoc'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
 
 # Application definition
 
