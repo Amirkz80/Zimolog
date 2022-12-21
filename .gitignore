@@ -6,3 +6,4 @@ runserver.bat
 shell.bat
 media/images/
 users/static/users/media
+blog/settings.py
