@@ -44,8 +44,10 @@ EMAIL_USE_TLS = True
 
 INSTALLED_APPS = [
     # My apps.
+    'rest_framework',
     'blogs',
     'users',
+    'api',
 
     # tp a.
     'bootstrap5',
